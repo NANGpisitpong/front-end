@@ -2,7 +2,7 @@
 export default function Service() {
   return (
     <>
-   <h1> Service Page</h1>
+   <h1> Service IT</h1>
     </>
   );
 }

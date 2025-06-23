@@ -19,6 +19,8 @@
   }
 }
 
+
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -30,6 +32,7 @@ h1{
   text-align: center;
   font-size: 60px;
   color: rgb(0, 255, 0);
+
 }
 h2{
   font-family: "Trirong", serif;
@@ -50,4 +53,16 @@ h5{
     font-family: "Trirong", serif;
   font-size: 20px;
   color: rgb(250, 233, 1);
+}
+
+p1{
+  font-family: "Trirong", serif;
+  font-size: 40px;
+  color: rgb(63, 151, 70);
+}
+
+p2{
+  font-family: "Trirong", serif;
+  font-size: 40px;
+  color: rgb(167, 216, 171);
 }

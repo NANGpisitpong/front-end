@@ -1,7 +1,8 @@
 export default function Contect() {
   return (
     <>
-   <h1> Contect Page</h1>
+   <h1> Contect IT</h1>
     </>
+    
   );
 }
