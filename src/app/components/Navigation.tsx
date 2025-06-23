@@ -4,12 +4,12 @@ export default function Navigation() {
   return (
     <nav style={{ padding: '1rem', borderBottom: '1px solid #eee' }}>
       <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none' }}>
-       <h2> <li><Link href="/">หน้าแรก</Link></li>
-        <li><Link href="/about">เกี่ยวกับ</Link></li>
-        <li><Link href="/service">บริการ</Link></li>
-        <li><Link href="/contect">ติดต่อ</Link></li>
-      </h2> 
+        <li><h2><Link href="/">หน้าแรก(1)</Link></h2></li>
+        <li><h3><Link href="/">เกี่ยวกับ(2)</Link></h3></li>
+        <li><h4><Link href="/">บริการ(3)</Link></h4></li>
+        <li><h5><Link href="/">ติดต่อ(4)</Link></h5></li>
      </ul>
     </nav>
+    
   );
 }
