@@ -2,13 +2,14 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 
+
 export default function Navigation() {
   useEffect(() => {
     // @ts-ignore
     import('bootstrap/dist/js/bootstrap.bundle.min.js');
   }, []);
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg bg-body-tertiary" lang="th">
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
           <img src="/bootstrap-logo.svg" alt="Logo" width={30} height={24} className="d-inline-block align-text-top" />
@@ -25,6 +26,9 @@ export default function Navigation() {
             <li className="nav-item">
               <Link className="nav-link" href="/about">About</Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" href="/service">Service</Link>
+            </li> 
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
@@ -37,15 +41,13 @@ export default function Navigation() {
                 Contect
               </a>
               <ul className="dropdown-menu">
-                <li><Link className="dropdown-item" href="https://www.facebook.com/">Facebug</Link></li>
+                <li><Link className="dropdown-item" href="https://www.facebook.com/">Facebook</Link></li>
                 <li><Link className="dropdown-item" href="https://www.line.me/en/">line</Link></li>
-                <li><hr className="dropdown-divider" /></li>
-                <li><Link className="dropdown-item" href="/service">Service</Link></li>
+               
+            
               </ul>
             </li>
-            <li className="nav-item">
-              <a className="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li>
+        
           </ul>
           <form className="d-flex" role="search">
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />

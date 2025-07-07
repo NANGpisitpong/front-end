@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Prompt } from 'next/font/google';
 import { Geist, Geist_Mono } from "next/font/google"; 
 import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
 
 const prompt = Prompt({
   subsets: ['thai', 'latin'], // รองรับภาษาไทย
@@ -17,7 +18,7 @@ const geistSans = Geist({
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-geist-mono",  
   subsets: ["latin"],
 });
 
@@ -38,6 +39,7 @@ export const metadata: Metadata = {
       <body className={prompt.className}>
         <Navigation />
         {children}
+        <Footer/>
       </body>
     </html>
     );
