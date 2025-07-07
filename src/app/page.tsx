@@ -1,8 +1,10 @@
+
 export default function Home() {
   return (
     <>
-   <h1> Home Work IT</h1>
-    <p>ยินดีต้อนรับสู่เว็บไซต์ของเรา</p>
-    </>
+   <h1 className="text-4xl text-center text-green-500 "
+   > Home Page
+    </h1></>
+    
   );
 }

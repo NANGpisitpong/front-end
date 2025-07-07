@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #000000;
+  --foreground: #ffffff;
 }
 
 @them inline {
@@ -15,54 +15,12 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #000000;
-    --foreground: #ededed;
+    --foreground: #fff6f6;
   }
 }
-
-
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-}
-
-h1{
-  font-family: "Trirong", serif;
-  text-align: center;
-  font-size: 60px;
-  color: rgb(0, 255, 0);
-
-}
-h2{
-  font-family: "Trirong", serif;
-  font-size: 20px;
-  color: rgb(255, 0, 0);
-}
-h3{
-    font-family: "Trirong", serif;
-  font-size: 20px;
-  color: rgb(4, 0, 255);
-}
-h4{
-    font-family: "Trirong", serif;
-  font-size: 20px;
-  color: rgb(108, 144, 161);
-}
-h5{
-    font-family: "Trirong", serif;
-  font-size: 20px;
-  color: rgb(250, 233, 1);
-}
-
-p{
-  font-family: "Trirong", serif;
-  font-size: 40px;
-  color: rgb(63, 151, 70);
-}
-
-p2{
-  font-family: "Trirong", serif;
-  font-size: 40px;
-  color: rgb(167, 216, 171);
 }
