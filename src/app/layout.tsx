@@ -3,9 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import type { Metadata } from "next";
 import { Prompt } from 'next/font/google';
 import { Geist, Geist_Mono } from "next/font/google"; 
-import Navigation from "./components/Navigation";
-import Footer from "./components/Footer";
-import Card from "./components/card";
+import Navigation from './components/Navigation';
 
 const prompt = Prompt({
   subsets: ['thai', 'latin'], // รองรับภาษาไทย
@@ -40,8 +38,6 @@ export const metadata: Metadata = {
       <body className={prompt.className}>
         <Navigation />
         {children}
-        <Card />
-        <Footer/>
       </body>
     </html>
     );
