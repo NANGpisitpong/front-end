@@ -294,17 +294,3 @@ button {
     margin-top: 16px;
   }
 }
-
-.bg-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-.register-wrapper {
-  position: relative;
-  z-index: 1;
-}
