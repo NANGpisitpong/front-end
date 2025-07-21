@@ -5,6 +5,7 @@ import './res.css'; // 🔁 อย่าลืมตรวจสอบ path ว�
 
 const Register: React.FC = () => {
   const router = useRouter();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -121,6 +122,8 @@ const Register: React.FC = () => {
       <div className="register-card">
         <div className="register-header">
           <a href="/login" className="back-btn">◀ กลับเข้าสู่ระบบ</a>
+          <h2>ลงทะเบียนสมาชิก</h2>
+          <p className="subtitle">สมัครใช้งานเพื่อเข้าสู่ระบบเทรด Forex/หุ้น อย่างมีสไตล์</p>
           <h2>ลงทะเบียนสมาชิก</h2>
           <p className="subtitle">สมัครใช้งานเพื่อเข้าสู่ระบบเทรด Forex/หุ้น อย่างมีสไตล์</p>
         </div>
@@ -265,6 +268,17 @@ const Register: React.FC = () => {
             />
           </div>
 
+          {/* ยอมรับเงื่อนไข */}
+          <div className="checkbox-inline">
+            <input
+              type="checkbox"
+              id="acceptedTerms"
+              name="acceptedTerms"
+              checked={formData.acceptedTerms}
+              onChange={handleChange}
+              required
+            />
+            <label htmlFor="acceptedTerms">ฉันยอมรับเงื่อนไขการใช้งาน</label>
           {/* ยอมรับเงื่อนไข */}
           <div className="checkbox-inline">
             <input

@@ -5,6 +5,7 @@ import { Prompt } from 'next/font/google';
 import { Geist, Geist_Mono } from "next/font/google"; 
 import Navigation from './components/Navigation';
 
+
 const prompt = Prompt({
   subsets: ['thai', 'latin'], // รองรับภาษาไทย
   weight: ['300', '400', '500', '600', '700'],

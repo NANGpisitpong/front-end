@@ -1,15 +1,20 @@
 "use client";
+"use client";
 import React, { useState, FormEvent } from 'react';
+import Link from 'next/link';
 import Link from 'next/link';
 import './login.css';
 import { FaGoogle } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 const Login: React.FC = () => {
+  const pathname = usePathname();
   const pathname = usePathname();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
+  const [bgColor, setBgColor] = useState('#121212');
   const [bgColor, setBgColor] = useState('#121212');
   const [error, setError] = useState('');
 
@@ -18,12 +23,14 @@ const Login: React.FC = () => {
     if (email !== 'test@example.com' || password !== '123456') {
       setError('❌ไม่พบบัญชีนี้ กรุณาตรวจสอบข้อมูลอีกครั้ง');
       return;
+      return;
     }
     setError('');
     console.log({ email, password, remember });
   };
 
   const handleChangeBackground = () => {
+    const colors = ['#121212', '#1e1e1e', '#002200', '#003300', '#001122'];
     const colors = ['#121212', '#1e1e1e', '#002200', '#003300', '#001122'];
     const next = colors[Math.floor(Math.random() * colors.length)];
     setBgColor(next);
@@ -47,6 +54,8 @@ const Login: React.FC = () => {
 
             <form onSubmit={handleSubmit}>
               {error && <div className="alert alert-danger">{error}</div>}
+            <form onSubmit={handleSubmit}>
+              {error && <div className="alert alert-danger">{error}</div>}
 
               <label htmlFor="email">Account👤</label>
               <input
@@ -57,7 +66,25 @@ const Login: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+              <label htmlFor="email">Account👤</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="Username or Email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
 
+              <label htmlFor="password">Password🔑</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
               <label htmlFor="password">Password🔑</label>
               <input
                 type="password"
@@ -81,7 +108,26 @@ const Login: React.FC = () => {
                   Forgot password
                 </Link>
               </div>
+              <div className="form-row">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={remember}
+                    onChange={(e) => setRemember(e.target.checked)}
+                  />
+                  Remember for 30 days
+                </label>
+                <Link href="/forgot-password" className="forgot-link">
+                  Forgot password
+                </Link>
+              </div>
 
+              <button type="submit" className="btn-primary">Sign in</button>
+              <button type="button" className="btn-google">
+                <FaGoogle />
+                Sign in with Google
+              </button>
+            </form>
               <button type="submit" className="btn-primary">Sign in</button>
               <button type="button" className="btn-google">
                 <FaGoogle />
@@ -91,9 +137,20 @@ const Login: React.FC = () => {
 
             <p className="footer">
               Don’t have an account? <Link href="/register">Sign up</Link>
+            <p className="footer">
+              Don’t have an account? <Link href="/register">Sign up</Link>
             </p>
           </div>
+          </div>
 
+          <div className="login-image-container">
+            <img
+              src="/images/Patterns.png"
+              alt="Forex Graph Pattern"
+              className="login-image"
+              draggable={false}
+            />
+          </div>
           <div className="login-image-container">
             <img
               src="/images/Patterns.png"
@@ -107,8 +164,11 @@ const Login: React.FC = () => {
 
       {/* ปุ่มแก้เบื่ออยู่มุมขวาล่าง */}
       <button className="change-bg-btn-fixed" onClick={handleChangeBackground}>
+      {/* ปุ่มแก้เบื่ออยู่มุมขวาล่าง */}
+      <button className="change-bg-btn-fixed" onClick={handleChangeBackground}>
         🎨 ปุ่มแก้เบื่อ
       </button>
+    </>
     </>
   );
 };
