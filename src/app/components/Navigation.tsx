@@ -6,6 +6,7 @@ export default function Navigation() {
   const pathname = usePathname();
   if (pathname === '/login' || pathname === '/register') return null;
 
+  
   return (
     <nav className="navbar navbar-expand-lg bg-dark text-light shadow" lang="th" style={{ borderBottom: '2px solid #22c55e' }}>
 
