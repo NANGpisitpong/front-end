@@ -5,7 +5,6 @@ import './res.css'; // 🔁 อย่าลืมตรวจสอบ path ว�
 
 const Register: React.FC = () => {
   const router = useRouter();
-  const router = useRouter();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -124,8 +123,6 @@ const Register: React.FC = () => {
           <a href="/login" className="back-btn">◀ กลับเข้าสู่ระบบ</a>
           <h2>ลงทะเบียนสมาชิก</h2>
           <p className="subtitle">สมัครใช้งานเพื่อเข้าสู่ระบบเทรด Forex/หุ้น อย่างมีสไตล์</p>
-          <h2>ลงทะเบียนสมาชิก</h2>
-          <p className="subtitle">สมัครใช้งานเพื่อเข้าสู่ระบบเทรด Forex/หุ้น อย่างมีสไตล์</p>
         </div>
 
         <form onSubmit={handleSubmit} className="register-form">
@@ -194,7 +191,7 @@ const Register: React.FC = () => {
               placeholder="นามสกุล"
             />
 
-           <label>วันเกิด</label>
+            <label>วันเกิด</label>
 <div className="birthdate-select">
 <select name="birthDay" value={formData.birthDay} onChange={handleChange} required>
     <option value="">วัน</option>
@@ -219,7 +216,6 @@ const Register: React.FC = () => {
            })}
             </select>
 </div>
-
 
             <label>เพศ👩🧑</label>
             <div className="radio-group">
@@ -268,17 +264,6 @@ const Register: React.FC = () => {
             />
           </div>
 
-          {/* ยอมรับเงื่อนไข */}
-          <div className="checkbox-inline">
-            <input
-              type="checkbox"
-              id="acceptedTerms"
-              name="acceptedTerms"
-              checked={formData.acceptedTerms}
-              onChange={handleChange}
-              required
-            />
-            <label htmlFor="acceptedTerms">ฉันยอมรับเงื่อนไขการใช้งาน</label>
           {/* ยอมรับเงื่อนไข */}
           <div className="checkbox-inline">
             <input
