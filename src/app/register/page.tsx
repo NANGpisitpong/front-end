@@ -1,8 +1,11 @@
 "use client";
 import React, { useState, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import './res.css';
 
+
 const Register: React.FC = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -32,7 +35,7 @@ const Register: React.FC = () => {
       return;
     }
     console.log(formData);
-    alert('ลงทะเบียนเรียบร้อย!');
+    router.push('/login');
   };
 
   return (
@@ -40,121 +43,149 @@ const Register: React.FC = () => {
       <div className="register-card">
         <div className="register-header">
           <a href="/login" className="back-btn">◀ กลับเข้าสู่ระบบ</a>
-          <h2 className="text-center">ลงทะเบียน</h2>
+          <h2>ลงทะเบียนสมาชิก</h2>
+          <p className="subtitle">สมัครใช้งานเพื่อเข้าสู่ระบบเทรด Forex/หุ้น อย่างมีสไตล์</p>
         </div>
 
         <form onSubmit={handleSubmit} className="register-form">
-          <label>ชื่อผู้ใช้</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
+          {/* บัญชีผู้ใช้ */}
+          <div className="form-section">
+            <h3>บัญชีผู้ใช้</h3>
+            <label>ชื่อผู้ใช้ หรือ อีเมลล์</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
 
-          <label>รหัสผ่าน</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
+            <label>รหัสผ่าน</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
 
-          <label>คำนำหน้าชื่อ</label>
-          <select name="prefix" value={formData.prefix} onChange={handleChange} required>
-            <option value="">-- เลือก --</option>
-            <option value="mr">นาย</option>
-            <option value="mrs">นาง</option>
-            <option value="miss">นางสาว</option>
-          </select>
+            <label>รหัสผ่าน(ยื่นยันอีกรอบ)</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <label>ชื่อ</label>
-          <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
+          {/* ข้อมูลส่วนตัว */}
+          <div className="form-section">
+            <h3>ข้อมูลส่วนตัว</h3>
+            <label>คำนำหน้าชื่อ</label>
+            <select
+              name="prefix"
+              value={formData.prefix}
+              onChange={handleChange}
+              required
+            >
+              <option value="">-- เลือก --</option>
+              <option value="mr">นาย</option>
+              <option value="mrs">นาง</option>
+              <option value="miss">นางสาว</option>
+            </select>
 
-          <label>นามสกุล</label>
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
+            <label>ชื่อ</label>
+            <input
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+            />
 
-          <label>ที่อยู่</label>
-          <textarea
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            rows={3}
-            required
-          ></textarea>
+            <label>นามสกุล</label>
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+            />
 
-          <label>เพศ</label>
-          <div className="radio-group">
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="male"
-                checked={formData.gender === 'male'}
-                onChange={handleChange}
-                required
-              />
+            <label>วันเกิด</label>
+            <input
+              type="date"
+              name="birthdate"
+              value={formData.birthdate}
+              onChange={handleChange}
+              required
+            />
+
+            <label>เพศ</label>
+            <div className="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="male"
+                  checked={formData.gender === 'male'}
+                  onChange={handleChange}
+                  required
+                />
               ชาย
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="female"
-                checked={formData.gender === 'female'}
-                onChange={handleChange}
-              />
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="female"
+                  checked={formData.gender === 'female'}
+                  onChange={handleChange}
+                />
               หญิง
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="other"
-                checked={formData.gender === 'other'}
-                onChange={handleChange}
-              />
-              อื่น ๆ
-            </label>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="other"
+                  checked={formData.gender === 'other'}
+                  onChange={handleChange}
+                />
+              อื่นๆ
+              </label>
+            </div>
+
+            {/* กล่องที่อยู่ */}
+            <label>ที่อยู่</label>
+            <textarea
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              rows={3}
+              required
+              className="address-textarea"
+            ></textarea>
           </div>
 
-          <label>วันเกิด</label>
-          <input
-            type="date"
-            name="birthdate"
-            value={formData.birthdate}
-            onChange={handleChange}
-            required
-          />
-
-          <div className="checkbox-group">
-            <label>
-              <input
-                type="checkbox"
-                name="acceptedTerms"
-                checked={formData.acceptedTerms}
-                onChange={handleChange}
-                required
-              />
-              ฉันยอมรับเงื่อนไขการใช้งาน
-            </label>
+          {/* ยอมรับเงื่อนไข */}
+          <div className="checkbox-inline">
+            <input
+              type="checkbox"
+              id="acceptedTerms"
+              name="acceptedTerms"
+              checked={formData.acceptedTerms}
+              onChange={handleChange}
+              required
+            />
+            <label htmlFor="acceptedTerms">ฉันยอมรับเงื่อนไขการใช้งาน</label>
           </div>
 
-          <button type="submit" className="btn-register">Register</button>
+          {/* ปุ่มลงทะเบียน */}
+          <button type="submit" className="btn-register">
+            ลงทะเบียน
+          </button>
         </form>
       </div>
     </div>

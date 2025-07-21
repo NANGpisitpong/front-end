@@ -12,16 +12,16 @@ export default function Carousel() {
     <div id="carouselExample" className="carousel slide carousel-fade" data-bs-ride="carousel">
       <div className="carousel-inner">
         <div className="carousel-item active">
-          <Image src="/images/sliders/sliders1.png" className="d-block w-100" alt="..." width={1024} height={768} />
+          <Image src="/images/01.jpg" className="d-block w-100" alt="..." width={1024} height={768} />
         </div>
         <div className="carousel-item">
-          <Image src="/images/sliders/sliders2.png" className="d-block w-100" alt="..." width={1024} height={768} />
+          <Image src="/images/02.png" className="d-block w-100" alt="..." width={1024} height={768} />
         </div>
         <div className="carousel-item">
-          <Image src="/images/sliders/sliders3.jpg" className="d-block w-100" alt="..." width={1024} height={768} />
+          <Image src="/images/03.jpg" className="d-block w-100" alt="..." width={1024} height={768} />
         </div>
         <div className="carousel-item">
-          <Image src="/images/sliders/sliders4.png" className="d-block w-100" alt="..." width={1024} height={768} />
+          <Image src="/images/04.png" className="d-block w-100" alt="..." width={1024} height={768} />
         </div>
       </div>
       <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
