@@ -41,3 +41,14 @@ body {
   background-color: rgba(34, 197, 94, 0.15) !important;
   color: #22c55e !important;
 }
+
+.particle {
+  transition: transform 0.05s linear;
+  background-color: #ff4081;
+  box-shadow: 0 0 6px #ff4081aa;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  position: absolute;
+  pointer-events: none;
+}
