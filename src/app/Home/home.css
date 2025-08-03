@@ -1,13 +1,15 @@
+/* home.css */
+
 .carousel-wrapper {
   max-width: 900px;
   margin: 40px auto;
-  padding: 0 20px;
+  padding: 0 20px 40px;
   user-select: none;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #f0f0f0;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   border-radius: 15px;
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
 }
 
 .carousel-title {
@@ -17,27 +19,27 @@
   margin: 20px 0 30px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  text-shadow: 0 0 10px #00fff7, 0 0 20px #00fff7;
+  text-shadow: 0 0 12px #00fff7, 0 0 24px #00fff7;
 }
 
-/* swiper container */
+/* Swiper container */
 .mySwiper {
-  padding-bottom: 60px; /* สำหรับ pagination */
+  padding-bottom: 70px; /* พื้นที่ให้ pagination */
 }
 
-/* slide */
+/* Slide style */
 .slide {
   position: relative;
-  width: 380px !important;
+  width: 380px !important; /* กำหนดขนาดชัดเจน */
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0, 255, 255, 0.4);
+  box-shadow: 0 12px 24px rgba(0, 255, 255, 0.5);
   transition: transform 0.4s ease;
   cursor: grab;
   background: #111a21;
 }
 
-/* ภาพใน slide */
+/* รูปใน slide */
 .slide img {
   border-radius: 20px;
   object-fit: cover;
@@ -45,21 +47,21 @@
   pointer-events: none;
 }
 
-/* caption overlay */
+/* Caption overlay */
 .slide-caption {
   position: absolute;
   bottom: 15px;
   left: 20px;
   color: #00fff7;
   font-weight: 700;
-  font-size: 1.25rem;
-  text-shadow: 0 0 5px #00fff7;
+  font-size: 1.3rem;
+  text-shadow: 0 0 6px #00fff7;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   pointer-events: none;
 }
 
-/* ปุ่ม navigation */
+/* ปุ่ม next/prev */
 .swiper-button-next,
 .swiper-button-prev {
   color: #00fff7;
@@ -68,32 +70,34 @@
   border: 2px solid #00fff7;
   border-radius: 50%;
   background: rgba(0, 255, 247, 0.15);
-  box-shadow: 0 0 15px #00fff7;
+  box-shadow: 0 0 18px #00fff7;
   transition: background 0.3s, transform 0.3s;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
   background: #00fff7;
   color: #0a1f29;
-  transform: scale(1.15);
+  transform: translateY(-50%) scale(1.15);
   box-shadow: 0 0 30px #00fff7;
 }
 
-/* pagination dots */
+/* Pagination dots */
 .swiper-pagination-bullet {
   background: #00fff7;
   opacity: 0.6;
   transition: opacity 0.3s;
-  box-shadow: 0 0 8px #00fff7;
+  box-shadow: 0 0 10px #00fff7;
 }
 
 .swiper-pagination-bullet-active {
   opacity: 1;
-  box-shadow: 0 0 15px #00fff7;
+  box-shadow: 0 0 20px #00fff7;
 }
 
-/* responsive */
+/* Responsive */
 @media (max-width: 768px) {
   .slide {
     width: 300px !important;

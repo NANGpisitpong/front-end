@@ -1,6 +1,4 @@
-'use client';
-
-import Image from 'next/image';
+'use client';import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation, Autoplay } from 'swiper/modules';
 
@@ -15,7 +13,7 @@ import './home.css'; // ไฟล์ css ที่เราจะเขียน
 export default function Carousel3D() {
   return (
     <div className="carousel-wrapper">
-      <h2 className="carousel-title">3D Coverflow Carousel</h2>
+      <h2 className="carousel-title">Hot trend</h2>
       <Swiper
         effect={'coverflow'}
         grabCursor={true}
