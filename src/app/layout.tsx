@@ -5,6 +5,7 @@ import { Prompt } from 'next/font/google';
 import { Geist, Geist_Mono } from 'next/font/google';
 import LayoutWrapper from './components/LayoutWrapper'; // Client wrapper
 
+
 const prompt = Prompt({
   subsets: ['thai', 'latin'],
   weight: ['300', '400', '500', '600', '700'],

@@ -1,0 +1,116 @@
+.carousel-wrapper {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  user-select: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #f0f0f0;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+}
+
+.carousel-title {
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin: 20px 0 30px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px #00fff7, 0 0 20px #00fff7;
+}
+
+/* swiper container */
+.mySwiper {
+  padding-bottom: 60px; /* สำหรับ pagination */
+}
+
+/* slide */
+.slide {
+  position: relative;
+  width: 380px !important;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 255, 255, 0.4);
+  transition: transform 0.4s ease;
+  cursor: grab;
+  background: #111a21;
+}
+
+/* ภาพใน slide */
+.slide img {
+  border-radius: 20px;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* caption overlay */
+.slide-caption {
+  position: absolute;
+  bottom: 15px;
+  left: 20px;
+  color: #00fff7;
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-shadow: 0 0 5px #00fff7;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* ปุ่ม navigation */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #00fff7;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #00fff7;
+  border-radius: 50%;
+  background: rgba(0, 255, 247, 0.15);
+  box-shadow: 0 0 15px #00fff7;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: #00fff7;
+  color: #0a1f29;
+  transform: scale(1.15);
+  box-shadow: 0 0 30px #00fff7;
+}
+
+/* pagination dots */
+.swiper-pagination-bullet {
+  background: #00fff7;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+  box-shadow: 0 0 8px #00fff7;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  box-shadow: 0 0 15px #00fff7;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .slide {
+    width: 300px !important;
+  }
+  .carousel-wrapper {
+    max-width: 100%;
+  }
+  .carousel-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .slide {
+    width: 240px !important;
+  }
+  .carousel-title {
+    font-size: 1.6rem;
+  }
+}

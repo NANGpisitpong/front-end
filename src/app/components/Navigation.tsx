@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 
 export default function Navigation() {
   const pathname = usePathname();
-  if (pathname === '/login' || pathname === '/register') return null;
+  if (pathname === '/login'  || pathname === '/' || pathname === '/register' ) return null; 
 
   
   return (
@@ -25,7 +25,7 @@ export default function Navigation() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link text-light fw-bold px-3 border border-success rounded" href="/">Home</Link>
+              <Link className="nav-link text-light fw-bold px-3 border border-success rounded" href="/Home">Home</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link text-light fw-bold px-3 border border-info rounded" href="/about">About</Link>
@@ -41,7 +41,7 @@ export default function Navigation() {
                 data-bs-toggle="dropdown"
                 onClick={e => e.preventDefault()}
               >
-                Contact
+              Contact
               </a>
               <ul className="dropdown-menu dropdown-menu-dark">
                 <li><Link className="dropdown-item" href="https://www.facebook.com/">Facebook</Link></li>

@@ -5,15 +5,15 @@ export default function ServiceInputs() {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#f8f9fa' // พื้นหลังอ่อน
+      backgroundColor: '#000000ff' // พื้นหลังอ่อน
     }}>
       <div style={{
         width: '100%',
         maxWidth: '500px',
         padding: '30px',
         borderRadius: '16px',
-        backgroundColor: '#ffffff',
-        boxShadow: '0 0 20px rgba(0, 0, 0, 0.1)'
+        backgroundColor: '#363434ff',
+        boxShadow: '0 0 20px rgba(240, 231, 231, 0.1)'
       }}>
         <div className="input-group mb-3">
           <span className="input-group-text" id="basic-addon1">@</span>

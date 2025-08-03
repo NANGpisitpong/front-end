@@ -5,6 +5,8 @@ import { FaGoogle } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import './login.css';
 
+
+
 type Particle = {
   x: number;
   y: number;
@@ -108,7 +110,7 @@ const Login: React.FC = () => {
       <ParticleFollowMouse />
 
       {pathname === '/login' && (
-        <Link href="/" className="back-button" aria-label="ย้อนกลับ">
+        <Link href="/Home" className="back-button" aria-label="ย้อนกลับ">
           <span>{'←'}</span>
           <span>ย้อนกลับ</span>
         </Link>
