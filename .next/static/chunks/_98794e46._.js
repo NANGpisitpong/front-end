@@ -19,7 +19,7 @@ var _s = __turbopack_context__.k.signature();
 function Navigation() {
     _s();
     const pathname = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"])();
-    if (pathname === '/login' || pathname === '/register') return null;
+    if (pathname === '/login' || pathname === '/' || pathname === '/register') return null;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
         className: "navbar navbar-expand-lg bg-dark text-light shadow",
         lang: "th",
@@ -48,7 +48,7 @@ function Navigation() {
                                             height: 45
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/components/Navigation.tsx",
-                                            lineNumber: 19,
+                                            lineNumber: 21,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -61,7 +61,7 @@ function Navigation() {
                                                     children: "Green"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/Navigation.tsx",
-                                                    lineNumber: 21,
+                                                    lineNumber: 23,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -71,40 +71,40 @@ function Navigation() {
                                                     children: "Pip"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/Navigation.tsx",
-                                                    lineNumber: 22,
+                                                    lineNumber: 24,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/components/Navigation.tsx",
-                                            lineNumber: 20,
+                                            lineNumber: 22,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/components/Navigation.tsx",
-                                    lineNumber: 18,
+                                    lineNumber: 20,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/Navigation.tsx",
-                                lineNumber: 17,
+                                lineNumber: 19,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                                 className: "nav-item",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                     className: "nav-link text-light fw-bold px-3 border border-success rounded",
-                                    href: "/",
+                                    href: "/Home",
                                     children: "Home"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/components/Navigation.tsx",
-                                    lineNumber: 27,
+                                    lineNumber: 29,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/Navigation.tsx",
-                                lineNumber: 26,
+                                lineNumber: 28,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -115,12 +115,12 @@ function Navigation() {
                                     children: "About"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/components/Navigation.tsx",
-                                    lineNumber: 30,
+                                    lineNumber: 32,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/Navigation.tsx",
-                                lineNumber: 29,
+                                lineNumber: 31,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -131,12 +131,12 @@ function Navigation() {
                                     children: "Service"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/components/Navigation.tsx",
-                                    lineNumber: 33,
+                                    lineNumber: 35,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/Navigation.tsx",
-                                lineNumber: 32,
+                                lineNumber: 34,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -147,67 +147,68 @@ function Navigation() {
                                         href: "#",
                                         role: "button",
                                         "data-bs-toggle": "dropdown",
+                                        "aria-expanded": "false",
                                         onClick: (e)=>e.preventDefault(),
                                         children: "Contact"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/components/Navigation.tsx",
-                                        lineNumber: 36,
-                                        columnNumber: 15
+                                        lineNumber: 38,
+                                        columnNumber: 3
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
                                         className: "dropdown-menu dropdown-menu-dark",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                                                     className: "dropdown-item",
                                                     href: "https://www.facebook.com/",
                                                     children: "Facebook"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/Navigation.tsx",
-                                                    lineNumber: 46,
-                                                    columnNumber: 21
+                                                    lineNumber: 50,
+                                                    columnNumber: 7
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/components/Navigation.tsx",
-                                                lineNumber: 46,
-                                                columnNumber: 17
+                                                lineNumber: 49,
+                                                columnNumber: 5
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                                                     className: "dropdown-item",
                                                     href: "https://www.line.me/en/",
                                                     children: "Line"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/Navigation.tsx",
-                                                    lineNumber: 47,
-                                                    columnNumber: 21
+                                                    lineNumber: 53,
+                                                    columnNumber: 7
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/components/Navigation.tsx",
-                                                lineNumber: 47,
-                                                columnNumber: 17
+                                                lineNumber: 52,
+                                                columnNumber: 5
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/components/Navigation.tsx",
-                                        lineNumber: 45,
-                                        columnNumber: 15
+                                        lineNumber: 48,
+                                        columnNumber: 3
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/components/Navigation.tsx",
-                                lineNumber: 35,
+                                lineNumber: 37,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/components/Navigation.tsx",
-                        lineNumber: 15,
+                        lineNumber: 17,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/components/Navigation.tsx",
-                    lineNumber: 14,
+                    lineNumber: 16,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -219,7 +220,7 @@ function Navigation() {
                             children: "เข้าสู่ระบบ"
                         }, void 0, false, {
                             fileName: "[project]/src/app/components/Navigation.tsx",
-                            lineNumber: 55,
+                            lineNumber: 63,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -228,24 +229,24 @@ function Navigation() {
                             children: "สมัครสมาชิก"
                         }, void 0, false, {
                             fileName: "[project]/src/app/components/Navigation.tsx",
-                            lineNumber: 56,
+                            lineNumber: 64,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/components/Navigation.tsx",
-                    lineNumber: 54,
+                    lineNumber: 62,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/components/Navigation.tsx",
-            lineNumber: 12,
+            lineNumber: 14,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/components/Navigation.tsx",
-        lineNumber: 10,
+        lineNumber: 12,
         columnNumber: 5
     }, this);
 }
