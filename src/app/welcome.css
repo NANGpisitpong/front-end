@@ -1,97 +1,238 @@
+/* Basic resets */
+body, html, #__next {
+  margin: 0; padding: 0; height: 100%; width: 100%; background: black; overflow: hidden;
+}
+
 .welcome-container {
+  position: relative;
+  width: 100vw; height: 100vh;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.background-canvas {
   position: fixed;
   top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: black;
-  color: rgb(0, 255, 200);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  overflow: hidden;
-  flex-direction: column;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  position: relative;
-}
-
-.background-canvas {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
   z-index: 0;
+  background-color: black;
 }
 
 .loading-screen {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: #22ff88;
+  font-family: monospace;
+  text-align: center;
+  z-index: 1000;
 }
 
 .spinner {
-  border: 5px solid rgba(0,255,0,0.1);
-  border-top: 5px solid #0f0;
+  margin: 0 auto 15px;
+  width: 45px;
+  height: 45px;
+  border: 6px solid #22ff88;
+  border-top-color: transparent;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
   animation: spin 1.2s linear infinite;
-  margin-bottom: 10px;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg);}
-  100% { transform: rotate(360deg);}
+  to { transform: rotate(360deg); }
 }
 
 .welcome-content {
   position: relative;
-  z-index: 1;
+  z-index: 10;
   text-align: center;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: opacity 1.2s ease, transform 1.2s ease;
-}
-
-.welcome-content.fade-zoom-in {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.animated-text {
-  font-size: 5rem;
-  letter-spacing: 0.5rem;
-  text-shadow:
-    0 0 5px #0f0,
-    0 0 10px #0f0,
-    0 0 20px #0f0,
-    0 0 40px #00ff00;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #22ff88;
   user-select: none;
-  min-height: 6rem;
+  max-width: 90vw;
 }
 
-.hint-text {
-  font-size: 1.3rem;
-  margin-top: 10px;
-  opacity: 0;
-  animation: fadeInText 1s forwards;
-  animation-delay: 0.5s;
-  color: rgb(131, 133, 131);
+.fade-zoom-in {
+  animation: fadeZoomIn 1s ease forwards;
 }
 
-@keyframes fadeInText {
-  to {
-    opacity: 1;
+@keyframes fadeZoomIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Animated glitch main text */
+.animated-text {
+  font-size: 6vw;
+  font-weight: 900;
+  position: relative;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #03440b;
+  filter: drop-shadow(0 0 4px #01ff77);
+  user-select: none;
+  line-height: 1;
+}
+
+.glitch-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  user-select: none;
+  pointer-events: none;
+}
+
+.glitch-layer1 {
+  color: #00ff99;
+  clip-path: polygon(0 2%, 100% 2%, 100% 10%, 0 10%);
+  animation: glitch1 3s infinite linear alternate-reverse;
+  mix-blend-mode: screen;
+}
+
+.glitch-layer2 {
+  color: #33ffcc;
+  clip-path: polygon(0 45%, 100% 45%, 100% 55%, 0 55%);
+  animation: glitch2 2.5s infinite linear alternate;
+  mix-blend-mode: screen;
+}
+
+.glitch-layer3 {
+  color: #00ff88;
+  clip-path: polygon(0 80%, 100% 80%, 100% 90%, 0 90%);
+  animation: glitch3 3.5s infinite linear alternate-reverse;
+  mix-blend-mode: screen;
+}
+
+@keyframes glitch1 {
+  0% { transform: translate(0); }
+  20% { transform: translate(-3px, -2px); }
+  40% { transform: translate(3px, 2px); }
+  60% { transform: translate(-1px, 1px); }
+  80% { transform: translate(2px, -1px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch2 {
+  0% { transform: translate(0); }
+  20% { transform: translate(2px, 3px); }
+  40% { transform: translate(-2px, -3px); }
+  60% { transform: translate(1px, -1px); }
+  80% { transform: translate(-1px, 2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch3 {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 1px); }
+  40% { transform: translate(2px, -1px); }
+  60% { transform: translate(-1px, -1px); }
+  80% { transform: translate(1px, 1px); }
+  100% { transform: translate(0); }
+}
+
+/* Extra Text Green Pip */
+.extra-text {
+  margin-top: 0.5em;
+  font-size: 3.8vw;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  user-select: none;
+  filter: drop-shadow(0 0 10px #22ff88);
+  display: inline-block;
+}
+
+.neon-text {
+  color: #22c55e;
+  text-shadow:
+    0 0 8px #22ff88,
+    0 0 15px #a1f5a1,
+    0 0 25px #22ff88,
+    0 0 35px #a1f5a1,
+    0 0 50px #22ff88;
+}
+
+/* Floating glitch RGB effect */
+.glitch-rgb-floating span {
+  display: inline-block;
+  position: relative;
+  animation: floatGlitch 4s ease-in-out infinite;
+}
+
+.glitch-rgb-floating span:first-child {
+  animation-delay: 0s;
+}
+
+.glitch-rgb-floating span:last-child {
+  animation-delay: 0.15s;
+  color: #facc15;
+  filter: drop-shadow(0 0 15px #facc15);
+}
+
+@keyframes floatGlitch {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+    filter: drop-shadow(0 0 10px currentColor);
+  }
+  50% {
+    transform: translate3d(0, -6px, 10px) rotateY(15deg);
+    filter: drop-shadow(0 0 20px currentColor);
   }
 }
 
-.neon-clock {
-  margin-top: 15px;
-  font-size: 1.5rem;
-  color: #0f0;
-  text-shadow: 0 0 10px #0f0;
+/* Hint text blinking */
+.hint-text {
+  margin-top: 1.6em;
+  font-family: monospace;
+  font-size: 1.15rem;
+  color: #88ff99;
   user-select: none;
+  animation: smoothBlink 1.8s infinite ease-in-out;
+  text-shadow: 0 0 6px #22ff88;
+}
+
+@keyframes smoothBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Neon clock */
+.neon-clock {
+  margin-top: 1.8em;
+  font-family: monospace;
+  font-size: 1.25rem;
+  color: #22ff88;
+  text-shadow:
+    0 0 10px #22ff88,
+    0 0 15px #a1f5a1,
+    0 0 30px #22ff88;
+  user-select: none;
+}
+
+/* Particles */
+.particle-super {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #22ff88 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0.8;
+  pointer-events: none;
+  animation: particleMove 1.8s forwards ease-out;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 0 5px #22ff88);
+}
+
+@keyframes particleMove {
+  to {
+    transform: translate(calc(var(--speed) * cos(var(--angle)) * 1px), calc(var(--speed) * sin(var(--angle)) * 1px));
+    opacity: 0;
+  }
 }
