@@ -1,6 +1,8 @@
 "use client";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -33,19 +35,26 @@ export default function Navigation() {
             <li className="nav-item">
               <Link className="nav-link text-light fw-bold px-3 border border-danger rounded" href="/service">Service</Link>
             </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle text-light px-3 border border-warning rounded"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                onClick={e => e.preventDefault()}
-              >
+           <li className="nav-item dropdown">
+          <a
+            className="nav-link dropdown-toggle text-light px-3 border border-warning rounded"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            >
               Contact
-              </a>
+                      </a>
               <ul className="dropdown-menu dropdown-menu-dark">
-                <li><Link className="dropdown-item" href="https://www.facebook.com/">Facebook</Link></li>
-                <li><Link className="dropdown-item" href="https://www.line.me/en/">Line</Link></li>
+                <li>
+                    <Link href="https://www.facebook.com/" className="dropdown-item" target="_blank">
+                  Facebook
+              </Link>
+                </li>
+              <li>
+                    <Link href="https://www.line.me/en/" className="dropdown-item" target="_blank">
+                  Line
+              </Link>
+                </li>
               </ul>
             </li>
           </ul>
