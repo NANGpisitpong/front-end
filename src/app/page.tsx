@@ -8,30 +8,33 @@ export default function WelcomePage() {
   const [loading, setLoading] = useState(true);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [timeString, setTimeString] = useState('');
+  const [displayText, setDisplayText] = useState('');
+  const fullText = 'WELCOME';
 
+  // Loading 2 วินาที
   useEffect(() => {
-    const loadingTimeout = setTimeout(() => {
+    const timer = setTimeout(() => {
       setLoading(false);
       setShowWelcome(true);
     }, 2000);
-
-    return () => clearTimeout(loadingTimeout);
+    return () => clearTimeout(timer);
   }, []);
 
+  // Hint ขึ้นหลัง Welcome 1.5 วินาที
   useEffect(() => {
     if (showWelcome) {
-      const hintTimeout = setTimeout(() => {
+      const timer = setTimeout(() => {
         setShowHint(true);
       }, 1500);
-
-      return () => clearTimeout(hintTimeout);
+      return () => clearTimeout(timer);
     }
   }, [showWelcome]);
 
-  // canvas effect: กราฟเส้นแสงเคลื่อนไหว
+  // Canvas เส้นแสงเหมือนเดิม
   useEffect(() => {
     const canvas = document.getElementById('bgCanvas') as HTMLCanvasElement;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas?.getContext('2d');
     let animationFrameId: number;
 
     const resize = () => {
@@ -39,11 +42,9 @@ export default function WelcomePage() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
-
     resize();
     window.addEventListener('resize', resize);
 
-    // กราฟเส้นแสงแบบง่าย
     const lines = Array.from({ length: 80 }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
@@ -70,7 +71,6 @@ export default function WelcomePage() {
 
       animationFrameId = requestAnimationFrame(draw);
     };
-
     draw();
 
     return () => {
@@ -78,6 +78,66 @@ export default function WelcomePage() {
       window.removeEventListener('resize', resize);
     };
   }, []);
+
+  // อัปเดตเวลาแบบเรียลไทม์
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date();
+      setTimeString(now.toLocaleTimeString());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Hacker text effect + typewriter + sound effect
+  useEffect(() => {
+    if (!loading && showWelcome) {
+      const chars = '!@#$%^&*()-_=+[]{}<>?/|\\';
+      let iterations = 0;
+      let intervalId: any = null;
+
+      // เสียงพิมพ์ดีด
+      const audio = new Audio('/type.mp3');
+      audio.volume = 0.1;
+
+      const scramble = () => {
+        if (iterations >= fullText.length) {
+          clearInterval(intervalId);
+          // พิมพ์ทีละตัวพร้อมเสียง
+          typeWriterEffect();
+          return;
+        }
+        let scrambled = '';
+        for (let i = 0; i < fullText.length; i++) {
+          if (i < iterations) scrambled += fullText[i];
+          else scrambled += chars[Math.floor(Math.random() * chars.length)];
+        }
+        setDisplayText(scrambled);
+        iterations += 1 / 3;
+      };
+
+      const typeWriterEffect = () => {
+        let idx = 0;
+        let textToShow = '';
+        const typeInterval = setInterval(() => {
+          if (idx >= fullText.length) {
+            clearInterval(typeInterval);
+            return;
+          }
+          textToShow += fullText[idx];
+          setDisplayText(textToShow);
+          audio.currentTime = 0;
+          audio.play().catch(() => {}); // เล่นเสียงพิมพ์ดีด
+          idx++;
+        }, 150);
+      };
+
+      intervalId = setInterval(scramble, 50);
+
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [loading, showWelcome]);
 
   const handleClick = () => {
     if (!loading) router.push('/Home');
@@ -96,8 +156,9 @@ export default function WelcomePage() {
 
       {!loading && (
         <div className={`welcome-content ${showWelcome ? 'fade-zoom-in' : ''}`}>
-          <h1>W E L C O M E</h1>
+          <h1 className="animated-text">{displayText}</h1>
           {showHint && <p className="hint-text">กดที่ใดก็ได้เพื่อเข้าสู่ระบบ</p>}
+          <p className="neon-clock">{timeString}</p>
         </div>
       )}
     </div>
