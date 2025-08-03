@@ -206,15 +206,3 @@ body {
   color: #e0ffe0;
   font-size: 0.9rem;
 }
-
-.particle {
-  transition: transform 0.01s linear;
-  background-color: #ff4081;
-  box-shadow: 0 0 6px #ff4081aa;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  position: absolute;
-  pointer-events: none;
-}
-

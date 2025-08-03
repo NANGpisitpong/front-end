@@ -1,84 +1,9 @@
 "use client";
-import React, { useRef, useEffect, useState, FormEvent } from 'react';
+import React, { useState, FormEvent } from 'react';
 import Link from 'next/link';
+import './login.css';
 import { FaGoogle } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
-import './login.css';
-
-
-
-type Particle = {
-  x: number;
-  y: number;
-  element: HTMLDivElement;
-};
-
-const ParticleFollowMouse: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const pointer = useRef({ x: 0, y: 0 });
-  const particles = useRef<Particle[]>([]);
-
-  const NUM_PARTICLES = 20;
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    // สร้าง element
-    for (let i = 0; i < NUM_PARTICLES; i++) {
-      const el = document.createElement('div');
-      el.className = 'particle';
-      el.style.position = 'absolute';
-      el.style.width = '10px';
-      el.style.height = '10px';
-      el.style.borderRadius = '50%';
-      el.style.background = `hsl(${(i * 30) % 360}, 100%, 60%)`;
-      el.style.pointerEvents = 'none';
-      container.appendChild(el);
-      particles.current.push({ x: window.innerWidth / 2, y: window.innerHeight / 2, element: el });
-    }
-
-    // เม้าส์เคลื่อนที่
-    const onMouseMove = (e: MouseEvent) => {
-      pointer.current.x = e.clientX;
-      pointer.current.y = e.clientY;
-    };
-    window.addEventListener('mousemove', onMouseMove);
-
-    // อนิเมชัน
-    const animate = () => {
-      for (let i = 0; i < NUM_PARTICLES; i++) {
-        const p = particles.current[i];
-        const targetX = i === 0 ? pointer.current.x : particles.current[i - 1].x;
-        const targetY = i === 0 ? pointer.current.y : particles.current[i - 1].y;
-
-        // คำนวณองศา
-        const dx = targetX - p.x;
-        const dy = targetY - p.y;
-        const angle = Math.atan2(dy, dx);
-
-        // เคลื่อนที่แบบมีหน่วง
-        p.x += Math.cos(angle) * 5;
-        p.y += Math.sin(angle) * 5;
-
-        // วางตำแหน่ง
-        p.element.style.transform = `translate(${p.x}px, ${p.y}px)`;
-      }
-
-      requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      particles.current.forEach(p => p.element.remove());
-      particles.current = [];
-    };
-  }, []);
-
-  return <div ref={containerRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 9999 }} />;
-};
 
 const Login: React.FC = () => {
   const pathname = usePathname();
@@ -106,9 +31,6 @@ const Login: React.FC = () => {
 
   return (
     <>
-      {/* แสดง Particle animation */}
-      <ParticleFollowMouse />
-
       {pathname === '/login' && (
         <Link href="/Home" className="back-button" aria-label="ย้อนกลับ">
           <span>{'←'}</span>
@@ -120,10 +42,7 @@ const Login: React.FC = () => {
         <div className="login-container">
           <div className="login-box">
             <div className="logo">🚀Let's go right now🚀</div>
-            <h2>
-              Welcome to <span style={{ color: '#22c55e' }}>Green</span>
-              <span style={{ color: '#facc15' }}>Pip</span>🤗
-            </h2>
+            <h2>Welcome🤗</h2>
 
             <form onSubmit={handleSubmit}>
               {error && <div className="alert alert-danger">{error}</div>}
