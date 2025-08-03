@@ -1,0 +1,92 @@
+/* [project]/src/app/welcome.css [app-client] (css) */
+.welcome-container {
+  color: #00ffc8;
+  cursor: pointer;
+  user-select: none;
+  background-color: #000;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  position: relative;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.background-canvas {
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.loading-screen {
+  z-index: 1;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+
+.spinner {
+  border: 5px solid #00ff001a;
+  border-top-color: #0f0;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+  animation: 1.2s linear infinite spin;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.welcome-content {
+  z-index: 1;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1.2s, transform 1.2s;
+  position: relative;
+  transform: scale(.8);
+}
+
+.welcome-content.fade-zoom-in {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.welcome-content h1 {
+  text-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 20px #0f0, 0 0 40px #0f0;
+  margin-bottom: .5rem;
+  font-size: 5rem;
+}
+
+.hint-text {
+  opacity: 0;
+  color: #838583;
+  margin-top: 10px;
+  font-size: 1.3rem;
+  animation: 1s .5s forwards fadeInText;
+}
+
+@keyframes fadeInText {
+  to {
+    opacity: 1;
+  }
+}
+
+
+/*# sourceMappingURL=src_app_welcome_c167f1bc.css.map*/
