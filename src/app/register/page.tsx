@@ -1,20 +1,20 @@
 "use client";
 import React, { useState, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import './res.css'; // 🔁 อย่าลืมตรวจสอบ path ว่า relative ถูกต้อง
+import './res.css';
+import Swal from 'sweetalert2';
 
 const Register: React.FC = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    confirmPassword: '', // ✅ เพิ่มช่องยืนยันรหัสผ่าน
+    confirmPassword: '',
     prefix: '',
     firstName: '',
     lastName: '',
     address: '',
     gender: '',
-    birthdate: '',
     acceptedTerms: false,
     birthYear: '',
     birthMonth: '',
@@ -31,24 +31,76 @@ const Register: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!formData.acceptedTerms) {
-      alert('กรุณายอมรับเงื่อนไขก่อนสมัครสมาชิก');
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณายอมรับเงื่อนไขก่อน',
+        text: 'คุณต้องยอมรับเงื่อนไขการใช้งานก่อนลงทะเบียน',
+      });
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      alert('รหัสผ่านไม่ตรงกัน');
+      Swal.fire({
+        icon: 'error',
+        title: 'รหัสผ่านไม่ตรงกัน',
+        text: 'กรุณากรอกรหัสผ่านให้ตรงกันทั้งสองช่อง',
+      });
       return;
     }
 
-    console.log(formData);
-    router.push('/login');
+    const bodyData = {
+      username: formData.username,
+      password: formData.password,
+      firstname: formData.firstName,
+      lastname: formData.lastName,
+      fullname: `${formData.prefix}${formData.firstName} ${formData.lastName}`,
+      gender: formData.gender,
+      address: formData.address,
+      birthdate: `${formData.birthYear}-${formData.birthMonth.padStart(2, '0')}-${formData.birthDay.padStart(2, '0')}`,
+    };
+
+    try {
+      const res = await fetch('http://itdev.cmtc.ac.th:3000/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(bodyData),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'สมัครสมาชิกสำเร็จ 🎉',
+          text: 'ยินดีต้อนรับ! ไปเข้าสู่ระบบกันเลย',
+          confirmButtonText: 'ไปยังหน้าล็อกอิน',
+        }).then(() => {
+          router.push('/login');
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'สมัครไม่สำเร็จ',
+          text: result?.message || 'เกิดข้อผิดพลาดในการลงทะเบียน',
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
+      });
+      console.error(error);
+    }
   };
 
-  // เอฟเฟกต์พื้นหลัง particle
   useEffect(() => {
     const canvas = document.createElement('canvas');
     canvas.className = 'bg-canvas';
@@ -68,11 +120,11 @@ const Register: React.FC = () => {
       particles.push({
         x: mouse.x,
         y: mouse.y,
-        radius: Math.random() * 3 + 2
+        radius: Math.random() * 3 + 2,
       });
     }
 
-    window.addEventListener('mousemove', e => {
+    window.addEventListener('mousemove', (e) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
     });
@@ -192,30 +244,48 @@ const Register: React.FC = () => {
             />
 
             <label>วันเกิด</label>
-<div className="birthdate-select">
-<select name="birthDay" value={formData.birthDay} onChange={handleChange} required>
-    <option value="">วัน</option>
-    {Array.from({ length: 31 }, (_, i) => (
-      <option key={i + 1} value={i + 1}>{i + 1}</option>
-    ))}
-  </select>
-	<select name="birthMonth" value={formData.birthMonth} onChange={handleChange} required>
-          <option value="">เดือน</option>
-              {[
-      "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
-      "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
-           ].map((month, i) => (
-            <option key={i + 1} value={i + 1}>{month}</option>
-       ))}
-       </select>
- <select name="birthYear" value={formData.birthYear} onChange={handleChange} required>
-           <option value="">ปี</option>
-             {Array.from({ length: 100 }, (_, i) => {
-             const year = new Date().getFullYear() - i;
-              return <option key={year} value={year}>{year}</option>;
-           })}
-            </select>
-</div>
+            <div className="birthdate-select">
+              <select name="birthDay" value={formData.birthDay} onChange={handleChange} required>
+                <option value="">วัน</option>
+                {Array.from({ length: 31 }, (_, i) => (
+                  <option key={i + 1} value={String(i + 1)}>
+                    {i + 1}
+                  </option>
+                ))}
+              </select>
+              <select name="birthMonth" value={formData.birthMonth} onChange={handleChange} required>
+                <option value="">เดือน</option>
+                {[
+                  'มกราคม',
+                  'กุมภาพันธ์',
+                  'มีนาคม',
+                  'เมษายน',
+                  'พฤษภาคม',
+                  'มิถุนายน',
+                  'กรกฎาคม',
+                  'สิงหาคม',
+                  'กันยายน',
+                  'ตุลาคม',
+                  'พฤศจิกายน',
+                  'ธันวาคม',
+                ].map((month, i) => (
+                  <option key={i + 1} value={String(i + 1)}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+              <select name="birthYear" value={formData.birthYear} onChange={handleChange} required>
+                <option value="">ปี</option>
+                {Array.from({ length: 100 }, (_, i) => {
+                  const year = new Date().getFullYear() - i;
+                  return (
+                    <option key={year} value={String(year)}>
+                      {year}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
 
             <label>เพศ👩🧑</label>
             <div className="radio-group">
@@ -278,7 +348,9 @@ const Register: React.FC = () => {
           </div>
 
           {/* ปุ่ม */}
-          <button type="submit" className="btn-register">ลงทะเบียน</button>
+          <button type="submit" className="btn-register">
+            ลงทะเบียน
+          </button>
         </form>
       </div>
     </div>

@@ -1,0 +1,176 @@
+/* ==== โทน Dark Theme เหมือน res.css ==== */
+body {
+  background-color: #121212;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #e0ffe0;
+}
+
+/* ==== Wrapper & Card ==== */
+.user-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+  min-height: 100vh;
+  background: #121212;
+}
+
+.user-card {
+  background: #1e1e1e;
+  border-radius: 12px;
+  padding: 32px;
+  width: 100%;
+  max-width: 1200px;
+  box-shadow: 0 0 20px rgba(0, 255, 138, 0.15);
+}
+
+/* ==== Header ==== */
+.user-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.user-header h2 {
+  color: #00ffcc;
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.btn-add {
+  display: inline-block;
+  background: linear-gradient(90deg, #00ff85, #00ccaa);
+  padding: 10px 20px;
+  color: #121212;
+  font-weight: bold;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.btn-add:hover {
+  background: linear-gradient(90deg, #00ccaa, #00ff85);
+  box-shadow: 0 0 10px #00ff85;
+}
+
+/* ==== Table ==== */
+.table-container {
+  overflow-x: auto;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  color: #e0ffe0;
+  font-size: 0.9rem;
+}
+
+.user-table th,
+.user-table td {
+  border: 1px solid #00ff85;
+  padding: 8px 12px;
+  text-align: center;
+}
+
+.user-table thead {
+  background-color: #00ff85;
+  color: #121212;
+}
+
+.user-table tbody tr:nth-child(even) {
+  background-color: #1a1a1a;
+}
+
+.user-table tbody tr:hover {
+  background-color: #2a2a2a;
+}
+
+/* ==== ปุ่มในตาราง ==== */
+.btn-warning,
+.btn-danger {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: #121212;
+}
+
+.btn-warning:hover {
+  background-color: #ffdb58;
+}
+
+.btn-danger {
+  background-color: #ff4d4d;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #ff6666;
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 768px) {
+  .user-card {
+    padding: 24px 16px;
+  }
+
+  .user-table {
+    font-size: 0.8rem;
+  }
+}
+/* ==== พื้นหลังแบบวงแหวนเรืองแสงหมุนเบาๆ ==== */
+.users-background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #0d0d0d 20%, #000 80%);
+  z-index: -2;
+  overflow: hidden;
+}
+
+.glow-ring {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border: 2px solid #22ff88;
+  border-radius: 50%;
+  opacity: 0.12;
+  animation: spinRing 10s linear infinite;
+  filter: drop-shadow(0 0 20px #22ff88);
+}
+
+.glow-ring:nth-child(2) {
+  width: 300px;
+  height: 300px;
+  top: 20%;
+  left: 15%;
+  animation-delay: 2s;
+}
+
+.glow-ring:nth-child(3) {
+  width: 400px;
+  height: 400px;
+  top: 60%;
+  left: 70%;
+  animation-delay: 4s;
+}
+
+@keyframes spinRing {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  to {
+    transform: rotate(360deg) scale(1.1);
+  }
+}
