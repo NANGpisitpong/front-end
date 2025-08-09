@@ -1,115 +1,240 @@
 "use client";
-import React, { useState, FormEvent } from 'react';
-import Link from 'next/link';
-import './login.css';
-import { FaGoogle } from 'react-icons/fa';
-import { usePathname } from 'next/navigation';
+import React, {
+  useState,
+  useMemo,
+  useCallback,
+  FormEvent,
+  useEffect,
+  useRef,
+} from "react";
+import Link from "next/link";
+import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
+import "./login.css";
 
-const Login: React.FC = () => {
-  const pathname = usePathname();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [remember, setRemember] = useState(false);
-  const [bgColor, setBgColor] = useState('#121212');
-  const [error, setError] = useState('');
+/**
+ * Advanced Login component
+ * - Parallax particles
+ * - SVG graph layer
+ * - Glass panel with micro interactions
+ * - Accessible focus, responsive
+ */
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (email !== 'test@example.com' || password !== '123456') {
-      setError('❌ไม่พบบัญชีนี้ กรุณาตรวจสอบข้อมูลอีกครั้ง');
-      return;
+const NUM_PARTICLES = 48;
+const validateEmail = (email: string) => /^\S+@\S+\.\S+$/.test(email);
+
+export default function Login() {
+  const [email, setEmail] = useState(() => localStorage.getItem("savedEmail") || "");
+  const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState<boolean>(!!localStorage.getItem("savedEmail"));
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const particlesRef = useRef<HTMLDivElement | null>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  // particles positions (stable across renders)
+  const particles = useMemo(() => {
+    return Array.from({ length: NUM_PARTICLES }).map((_, idx) => {
+      const size = 2 + Math.random() * 12;
+      return {
+        id: idx,
+        top: Math.random() * 100,
+        left: Math.random() * 100,
+        size,
+        delay: Math.random() * 6000,
+        dur: 4000 + Math.random() * 7000,
+        hueShift: -20 + Math.random() * 40,
+        opacity: 0.25 + Math.random() * 0.75,
+      };
+    });
+  }, []);
+
+  // Parallax: card tilt on mouse move
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    function onMove(e: MouseEvent) {
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const rx = (dy / rect.height) * -8;
+      const ry = (dx / rect.width) * 10;
+      el.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
     }
-    setError('');
-    console.log({ email, password, remember });
-  };
+    function onLeave() {
+      if (!el) return;
+      el.style.transform = "";
+    }
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseleave", onLeave);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
 
-  const handleChangeBackground = () => {
-    const colors = ['#121212', '#1e1e1e', '#002200', '#003300', '#001122'];
-    const next = colors[Math.floor(Math.random() * colors.length)];
-    setBgColor(next);
-  };
+  // particles parallax container slight follow
+  useEffect(() => {
+    const node = particlesRef.current;
+    if (!node) return;
+    const onMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 30; // px
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      node.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
+  // submit
+  const handleSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault();
+      setError("");
+      if (!validateEmail(email)) {
+        setError("❌ อีเมลไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง");
+        return;
+      }
+      if (!password) {
+        setError("❌ กรุณาใส่รหัสผ่าน");
+        return;
+      }
+      setLoading(true);
+      setTimeout(() => {
+        if (email !== "test@example.com" || password !== "123456") {
+          setLoading(false);
+          setError("❌ ไม่พบบัญชีหรือรหัสผ่านไม่ถูกต้อง");
+          return;
+        }
+        if (remember) localStorage.setItem("savedEmail", email);
+        else localStorage.removeItem("savedEmail");
+        setLoading(false);
+        setError("");
+        alert(`ยินดีต้อนรับ ${email}`);
+      }, 1200);
+    },
+    [email, password, remember]
+  );
 
   return (
     <>
-      {pathname === '/login' && (
-        <Link href="/Home" className="back-button" aria-label="ย้อนกลับ">
-          <span>{'←'}</span>
-          <span>ย้อนกลับ</span>
-        </Link>
-      )}
+      {/* layered background */}
+      <div className="bg-layer animated-gradient" aria-hidden />
+      <div className="bg-layer bg-grid" aria-hidden>
+        <svg className="stock-graph" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden>
+          {[...Array(6)].map((_, i) => {
+            const yBase = 220 - i * 18;
+            const d = `M0 ${yBase} C 150 ${yBase - (40 + i * 8)}, 300 ${yBase + (20 + i * 6)}, 450 ${yBase - (30 + i * 10)} C 600 ${yBase + 40}, 750 ${yBase - 60}, 900 ${yBase - 10} C1050 ${yBase - 40}, 1200 ${yBase - 20}, 1200 ${yBase - 20}`;
+            return <path key={i} className={`stock-path line${i + 1}`} d={d} style={{ animationDelay: `${i * 0.8}s` }} />;
+          })}
+        </svg>
+      </div>
 
-      <div className="login-wrapper" style={{ backgroundColor: bgColor }}>
-        <div className="login-container">
-          <div className="login-box">
-            <div className="logo">🚀Let's go right now🚀</div>
-            <h2>Welcome🤗</h2>
+      {/* particles */}
+      <div className="glowing-particles" ref={particlesRef} aria-hidden>
+        {particles.map((p) => (
+          <div
+            key={p.id}
+            className="particle"
+            style={{
+              top: `${p.top}%`,
+              left: `${p.left}%`,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              animationDelay: `${p.delay}ms`,
+              animationDuration: `${p.dur}ms`,
+              opacity: p.opacity,
+              filter: `hue-rotate(${p.hueShift}deg) blur(${p.size > 8 ? 1.6 : 0.4}px)`,
+            }}
+          />
+        ))}
+      </div>
 
-            <form onSubmit={handleSubmit}>
-              {error && <div className="alert alert-danger">{error}</div>}
+      <main className="login-page">
+        <div className="login-card" ref={cardRef} role="region" aria-label="Login">
+          <section className="panel form-panel">
+            <div className="brand">
+              <div className="logo"><img src="/images/GreenPip-logo.png"/></div>
+              <div className="brand-text">
+                <div className="brand-title">Let's go right now🚀</div>
+                <div className="brand-sub">Sign in to your dashboard</div>
+              </div>
+            </div>
 
-              <label htmlFor="email">Account👤</label>
+            <h2 className="panel-heading">Welcome 👋</h2>
+
+            <form className="panel-form" onSubmit={handleSubmit} noValidate>
+              {error && <div className="alert">{error}</div>}
+
+              <label className="form-label" htmlFor="email">Account🤵</label>
               <input
-                type="email"
                 id="email"
-                placeholder="Username or Email"
-                required
+                className="form-input"
+                type="email"
+                placeholder="you@domain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete="username"
+                aria-describedby="emailHelp"
               />
 
-              <label htmlFor="password">Password🔑</label>
-              <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-
-              <div className="form-row">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={remember}
-                    onChange={(e) => setRemember(e.target.checked)}
-                  />
-                  Remember for 30 days
-                </label>
-                <Link href="/forgot-password" className="forgot-link">
-                  Forgot password
-                </Link>
+              <label className="form-label" htmlFor="password">Password🔐</label>
+              <div className="password-field">
+                <input
+                  id="password"
+                  className="form-input"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  className="toggle-visibility"
+                  onClick={() => setShowPassword((s) => !s)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
 
-              <button type="submit" className="btn-primary">Sign in</button>
-              <button type="button" className="btn-google">
-                <FaGoogle />
-                Sign in with Google
+              <div className="row between small">
+                <label className="remember">
+                  <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} /> Remember 30 days
+                </label>
+                <Link href="/forgot-password" className="link muted">Forgot?</Link>
+              </div>
+
+              <button className="btn primary" type="submit" disabled={loading} aria-busy={loading}>
+                <span className="btn-text">{loading ? "Loading..." : "Sign in"}</span>
+                <span className="btn-emoji">➡️</span>
+              </button>
+
+              <button type="button" className="btn ghost btn-google" onClick={() => alert("Google placeholder")}>
+                <FaGoogle /> <span>Sign in with Google</span>
               </button>
             </form>
 
-            <p className="footer">
-              Don’t have an account? <Link href="/register">Sign up</Link>
+            <p className="signup">
+              Don’t have an account? <Link href="/register" className="link">Sign up</Link>
             </p>
-          </div>
+          </section>
 
-          <div className="login-image-container">
-            <img
-              src="/images/Patterns.png"
-              alt="Forex Graph Pattern"
-              className="login-image"
-              draggable={false}
-            />
-          </div>
+          <aside className="panel visual-panel" aria-hidden>
+            <div className="visual-overlay">
+              <img src="/images/Patterns.jpg" alt="Visual pattern" className="visual-image" draggable={false} />
+              <div className="visual-caption">
+                <h3>Real-time insights</h3>
+                <p>Realtime charts, subtle motion, and micro interactions — built for pros.</p>
+              </div>
+            </div>
+          </aside>
         </div>
-      </div>
-
-      {/* ปุ่มแก้เบื่ออยู่มุมขวาล่าง */}
-      <button className="change-bg-btn-fixed" onClick={handleChangeBackground}>
-        🎨 ปุ่มแก้เบื่อ
-      </button>
+      </main>
     </>
   );
-};
-
-export default Login;
+}

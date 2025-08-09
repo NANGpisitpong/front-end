@@ -1,176 +1,347 @@
-/* ====== ตัวพื้นฐาน ====== */
+/* พื้นหลังโทนดาร์กพร้อม gradient และเบลอแบบล้ำๆ */
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #121212;
-  color: #e0ffe0;
-  font-size: 0.95rem;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(120deg, #050b17 0%, #0a1a2a 100%);
+  color: #c9d1d9;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
 }
 
-/* ====== Wrapper และ Card ====== */
-.register-wrapper {
+/* Canvas แสดงอนิเมชันพาร์ติเคิล */
+.particle-canvas {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 10px #4098f0);
+}
+
+/* โครงสร้างหลักของฟอร์ม */
+.register-wrapper.stock-theme {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 40px 20px;
   min-height: 100vh;
-  padding: 20px;
-  background: #121212;
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
 .register-card {
-  background: #1e1e1e;
-  padding: 32px;
-  border-radius: 12px;
-  max-width: 480px;
+  background: rgba(10, 20, 40, 0.85);
+  border-radius: 20px;
+  box-shadow:
+    0 0 30px #4098f0,
+    inset 0 0 60px #4098f0;
   width: 100%;
-  box-shadow: 0 0 20px rgba(0, 255, 138, 0.15);
+  max-width: 560px;
+  padding: 32px 36px;
+  color: #c9d1d9;
+  backdrop-filter: blur(10px);
+  border: 1.5px solid #4098f0;
+  user-select: none;
 }
 
-/* ====== หัวข้อ ====== */
+/* Header */
 .register-header {
+  margin-bottom: 28px;
   text-align: center;
-  margin-bottom: 24px;
+  position: relative;
+  z-index: 11;
 }
 
 .register-header h2 {
-  font-size: 1.5rem;
-  color: #00ffcc;
-  margin-bottom: 4px;
+  font-weight: 900;
+  font-size: 2.5rem;
+  color: #00ff9f;
+  text-shadow:
+    0 0 8px #00ff9f,
+    0 0 24px #00ff9f,
+    0 0 48px #00ff9f;
+  margin-bottom: 8px;
 }
 
-.subtitle {
-  font-size: 0.9rem;
-  color: #aaa;
-  margin: 0;
+.register-header .subtitle {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #80ffc8aa;
 }
 
 .back-btn {
-  display: inline-block;
-  font-size: 0.85rem;
-  color: #00ff85;
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  font-weight: 600;
+  color: #4098f0cc;
   text-decoration: none;
-  margin-bottom: 12px;
+  transition: color 0.3s ease;
+  font-size: 1rem;
+  user-select: text;
 }
 
 .back-btn:hover {
-  text-decoration: underline;
-  color: #00ffaa;
+  color: #00ffc8;
 }
 
-/* ====== ฟอร์ม ====== */
+/* ฟอร์ม */
 .register-form {
   display: flex;
   flex-direction: column;
+  gap: 24px;
+  position: relative;
+  z-index: 11;
 }
 
-/* ====== แต่ละ Section ====== */
-.form-section {
-  margin-bottom: 24px;
-}
-
+/* ส่วนหัวแต่ละกลุ่ม */
 .form-section h3 {
-  font-size: 1.05rem;
-  color: #00ffcc;
-  border-bottom: 1px solid #00ff85;
-  padding-bottom: 4px;
-  margin-bottom: 12px;
-}
-
-/* ====== Label ====== */
-.register-form label {
-  font-size: 0.9rem;
-  color: #00ffb3;
-  font-weight: 500;
-  margin-bottom: 4px;
-  display: block;
-}
-
-/* ====== Input, Select, Textarea ====== */
-.register-form input,
-.register-form select,
-.address-textarea {
-  width: 100%;
-  padding: 8px 10px;
+  color: #00ff9f;
+  font-weight: 700;
+  font-size: 1.3rem;
+  text-shadow: 0 0 8px #00ff9f;
   margin-bottom: 16px;
-  background: #121212;
-  border: 1.5px solid #00ff85;
-  border-radius: 6px;
-  color: #e0ffe0;
-  font-size: 0.9rem;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
+  border-bottom: 1.5px solid #00ff9f55;
+  padding-bottom: 6px;
 }
 
-.register-form input:focus,
-.register-form select:focus,
-.address-textarea:focus {
-  border-color: #00ffee;
-  outline: none;
+/* Input, Select, Textarea */
+input[type="text"],
+input[type="password"],
+select,
+textarea {
+  background: #0a1a2a;
+  border: 1.5px solid #4098f0cc;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  color: #c9d1d9;
+  box-shadow:
+    inset 0 0 12px #4098f0aa;
+  transition: all 0.3s ease;
+  width: 100%;
+  outline-offset: 2px;
 }
 
-/* ====== Radio Group ====== */
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #00ff9f;
+  box-shadow:
+    0 0 10px #00ff9f,
+    inset 0 0 20px #00ff9fcc;
+  color: #00ffc8;
+}
+
+.input-error {
+  border-color: #ff3b3b !important;
+  box-shadow:
+    0 0 8px #ff3b3b,
+    inset 0 0 12px #ff3b3b;
+}
+
+/* ข้อความ error */
+.error-text {
+  color: #ff4b4b;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  display: block;
+  font-weight: 700;
+  text-shadow: 0 0 6px #ff3b3b88;
+}
+
+/* เลือกวันเกิดแบบ inline */
+.birthdate-select {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+/* Radio group */
 .radio-group {
   display: flex;
   gap: 20px;
-  margin: 8px 0 16px;
+  margin-top: 6px;
+  color: #c9d1d9;
 }
 
 .radio-group label {
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #ccc;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
 }
 
 .radio-group input[type="radio"] {
-  accent-color: #00ff85;
+  margin-right: 6px;
+  accent-color: #00ff9f;
 }
 
-/* ====== Checkbox Inline ====== */
+/* Checkbox inline */
 .checkbox-inline {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin: 8px 0 16px;
-  font-size: 0.85rem;
-  color: #ccc;
+  gap: 10px;
+  font-weight: 600;
+  color: #c9d1d9;
+  user-select: none;
+  margin-top: 8px;
 }
 
 .checkbox-inline input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: #00ff85;
+  width: 18px;
+  height: 18px;
+  accent-color: #00ff9f;
+  cursor: pointer;
 }
 
-/* ====== ปุ่ม Register ====== */
+/* ปุ่มลงทะเบียน */
+.btn-register {
+  background: linear-gradient(135deg, #00ff9f, #4098f0);
+  color: #000;
+  font-weight: 900;
+  font-size: 1.25rem;
+  padding: 14px 0;
+  border-radius: 16px;
+  border: none;
+  box-shadow:
+    0 0 12px #00ff9f,
+    inset 0 0 18px #00ff9faa;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.35s ease;
+  width: 100%;
+}
+
+.btn-register:hover:not(:disabled) {
+  box-shadow:
+    0 0 22px #00ff9f,
+    inset 0 0 30px #00ff9fff;
+  transform: scale(1.05);
+  color: #0a1a2a;
+}
+
+/* ปุ่ม Disabled */
+.btn-register:disabled {
+  background: #2a3b5a;
+  color: #555;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Text Glow คลาสพิเศษ */
+.glow-text {
+  color: #00ff9f;
+  text-shadow:
+    0 0 8px #00ff9f,
+    0 0 20px #00ff9f,
+    0 0 40px #00ff9f;
+}
+/* เพิ่มเติมให้แต่ละ form-section มีกรอบและระยะห่างชัดเจน */
+.form-section {
+  background: rgba(0, 255, 159, 0.07); /* สีเขียวใสๆ */
+  border: 1.5px solid #00ff9faa;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow:
+    0 0 10px #00ff9f33,
+    inset 0 0 15px #00ff9f22;
+}
+
+/* Label แต่ละอัน มี margin ให้ช่อง input ห่างจากข้อความ */
+.register-form label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #a8f0d1;
+}
+
+/* input, select, textarea ปรับ padding ให้สบายตา */
+input[type="text"],
+input[type="password"],
+select,
+textarea {
+  padding: 14px 18px;
+  font-size: 1.1rem;
+  border-radius: 14px;
+}
+
+/* ช่อง textarea สูงขึ้นหน่อย */
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* ปรับขนาดปุ่มลงทะเบียน ให้เต็มความกว้างของฟอร์ม */
 .btn-register {
   width: 100%;
-  padding: 10px;
-  font-weight: bold;
+  max-width: 100%;
+  font-size: 1.3rem;
+  font-weight: 900;
+  border-radius: 18px;
+  padding: 16px 0;
+  margin-top: 10px;
+}
+
+/* ปรับความสูงกล่องเลือกวันเกิด */
+.birthdate-select select {
+  min-width: 80px;
+  padding: 10px 14px;
+  border-radius: 12px;
   font-size: 1rem;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(90deg, #00ff6a, #00cc85);
-  color: #121212;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.btn-register:hover {
-  background: linear-gradient(90deg, #00cc85, #00ff6a);
-  box-shadow: 0 0 10px #00ff85;
+/* กลุ่มวิทยุจัด spacing ให้ชัดเจน */
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 1rem;
 }
 
-/* ====== Responsive ====== */
-@media (max-width: 600px) {
+/* ช่อง checkbox และ label ใหญ่ขึ้น สบายตา */
+.checkbox-inline {
+  font-size: 1.05rem;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+/* ปรับข้อความ error ให้อยู่ใกล้ input มากขึ้น และไม่กวน layout */
+.error-text {
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+/* ปรับ back-btn ให้ไม่ชนขอบ */
+.back-btn {
+  padding-left: 8px;
+  padding-top: 4px;
+  font-size: 1.1rem;
+  user-select: text;
+}
+
+/* ทำให้ฟอร์ม responsive สำหรับมือถือ */
+@media (max-width: 480px) {
   .register-card {
     padding: 24px 20px;
+    margin: 12px;
+  }
+
+  .birthdate-select {
+    flex-direction: column;
+  }
+
+  .birthdate-select select {
+    width: 100%;
+    min-width: auto;
   }
 
   .radio-group {
@@ -178,78 +349,89 @@ body {
     gap: 10px;
   }
 }
-
-.bg-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.birthdate-select {
+.register-form {
   display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 32px;
+  flex-wrap: wrap; /* ให้เล็กลงเลื่อนลงได้ */
+  justify-content: center;
+  margin-top: 10px;
 }
 
-.birthdate-select select {
-  flex: 1;
-  padding: 8px 10px;
-  background: #121212;
-  border: 1.5px solid #00ff85;
-  border-radius: 6px;
-  color: #e0ffe0;
-  font-size: 0.9rem;
+/* ครึ่งซ้ายและขวา */
+.form-left,
+.form-right {
+  flex: 1 1 280px; /* ขยายเต็มที่ แต่ขั้นต่ำ 280px */
+  background: rgba(10, 20, 40, 0.85);
+  border-radius: 20px;
+  box-shadow:
+    0 0 20px #00ff9f88,
+    inset 0 0 40px #00ff9faa;
+  padding: 24px 28px;
+  border: 1.5px solid #00ff9fcc;
+  color: #c9d1d9;
 }
 
-.address-textarea {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-/* ==== พื้นหลังแบบวงแหวนเรืองแสงหมุนเบาๆ ==== */
-.users-background {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, #0d0d0d 20%, #000 80%);
-  z-index: -2;
-  overflow: hidden;
-}
-
-.glow-ring {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  border: 2px solid #22ff88;
-  border-radius: 50%;
-  opacity: 0.12;
-  animation: spinRing 10s linear infinite;
-  filter: drop-shadow(0 0 20px #22ff88);
+/* หัวข้อแต่ละฝั่ง */
+.form-left h3,
+.form-right h3 {
+  margin-bottom: 24px;
+  color: #00ff9f;
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-shadow: 0 0 8px #00ff9f;
+  border-bottom: 2px solid #00ff9f55;
+  padding-bottom: 8px;
 }
 
-.glow-ring:nth-child(2) {
-  width: 300px;
-  height: 300px;
-  top: 20%;
-  left: 15%;
-  animation-delay: 2s;
-}
-
-.glow-ring:nth-child(3) {
-  width: 400px;
-  height: 400px;
-  top: 60%;
-  left: 70%;
-  animation-delay: 4s;
-}
-
-@keyframes spinRing {
-  from {
-    transform: rotate(0deg) scale(1);
+/* Responsive ให้เต็มความกว้างบนมือถือ */
+@media (max-width: 720px) {
+  .register-form {
+    flex-direction: column;
   }
-  to {
-    transform: rotate(360deg) scale(1.1);
+  .form-left,
+  .form-right {
+    width: 100%;
+    margin-bottom: 20px;
   }
+}
+.back-btn {
+  position: fixed; /* หรือตามต้องการ */
+  top: 16px;
+  left: 16px;
+  z-index: 9999; /* ให้แสดงอยู่บนสุด */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #00ff9f;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 8px 14px;
+  border: 2px solid #00ff9f;
+  border-radius: 10px;
+  box-shadow: 0 0 8px #00ff9f88;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  user-select: none;
+  background-color: rgba(10, 20, 40, 0.85); /* เพิ่มแบ็คกราวด์ให้ปุ่มชัดเจน */
+  backdrop-filter: blur(8px); /* เบลอแบบล้ำๆ */
+}
+
+.back-btn:hover,
+.back-btn:focus {
+  background-color: #00ff9f;
+  color: #0a1428;
+  box-shadow: 0 0 12px #00ff9fff;
+  outline: none;
+  cursor: pointer;
+}
+
+.back-arrow {
+  font-size: 1.3rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.back-btn:hover .back-arrow,
+.back-btn:focus .back-arrow {
+  transform: translateX(-3px);
 }
