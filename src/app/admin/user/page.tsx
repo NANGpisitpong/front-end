@@ -3,8 +3,21 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import './user.css';
 
+type UserItem = {
+  id: string | number;
+  firstname: string;
+  fullname: string;
+  lastname: string;
+  username: string;
+  password?: string;
+  address: string;
+  sex?: string;
+  gender?: string;
+  birthday?: string;
+};
+
 export default function Page() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<UserItem[]>([]);
 
   useEffect(() => {
     async function getUsers() {
