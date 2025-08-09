@@ -11,21 +11,15 @@ import Link from "next/link";
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import "./login.css";
 
-/**
- * Advanced Login component
- * - Parallax particles
- * - SVG graph layer
- * - Glass panel with micro interactions
- * - Accessible focus, responsive
- */
 
 const NUM_PARTICLES = 48;
 const validateEmail = (email: string) => /^\S+@\S+\.\S+$/.test(email);
 
+
 export default function Login() {
-  const [email, setEmail] = useState(() => localStorage.getItem("savedEmail") || "");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState<boolean>(!!localStorage.getItem("savedEmail"));
+  const [remember, setRemember] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -33,9 +27,20 @@ export default function Login() {
   const particlesRef = useRef<HTMLDivElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
 
-  // particles positions (stable across renders)
-  const particles = useMemo(() => {
-    return Array.from({ length: NUM_PARTICLES }).map((_, idx) => {
+  // particles positions (generate only on client to avoid hydration mismatch)
+  const [particles, setParticles] = useState<Array<{
+    id: number;
+    top: number;
+    left: number;
+    size: number;
+    delay: number;
+    dur: number;
+    hueShift: number;
+    opacity: number;
+  }>>([]);
+
+  useEffect(() => {
+    const arr = Array.from({ length: NUM_PARTICLES }).map((_, idx) => {
       const size = 2 + Math.random() * 12;
       return {
         id: idx,
@@ -48,6 +53,7 @@ export default function Login() {
         opacity: 0.25 + Math.random() * 0.75,
       };
     });
+    setParticles(arr);
   }, []);
 
   // Parallax: card tilt on mouse move
