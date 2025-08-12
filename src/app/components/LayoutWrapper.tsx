@@ -13,19 +13,16 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const [isLoading, setIsLoading] = useState(false);
   const [currentPath, setCurrentPath] = useState(pathname);
 
-  useEffect(() => {
-    if (pathname !== currentPath) {
-      setIsLoading(true);
-      setCurrentPath(pathname);
-
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 500); // ปรับเวลาตามความต้องการ
-
-      return () => clearTimeout(timer);
-    }
-  }, [pathname]);
-
+useEffect(() => {
+  if (pathname !== currentPath) {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      window.location.reload();
+    }, 400); // ปรับเวลาตามความต้องการ (400ms)
+    return () => clearTimeout(timer);
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [pathname]);
   return (
     <>
       {isLoading && <LoadingOverlay />}
