@@ -9,8 +9,8 @@ import 'swiper/css/navigation';
 
 import './home.css'; // ไฟล์ css ที่เราจะเขียนด้านล่าง
 
-
 export default function Carousel3D() {
+  
   return (
     <div className="carousel-wrapper">
       <h2 className="carousel-title">Hot trend</h2>
