@@ -1,5 +1,5 @@
 /* Theme variables scoped to the nav element */
-:global(nav[data-theme='dark']) {
+.navGlass[data-theme='dark'] {
   --bg: rgba(15, 23, 42, 0.6); /* slate-900/60 */
   --bg-strong: rgba(2, 6, 23, 0.85);
   --text: #e5e7eb; /* zinc-200 */
@@ -11,7 +11,7 @@
   --thumb: #22c55e;
 }
 
-:global(nav[data-theme='light']) {
+.navGlass[data-theme='light'] {
   --bg: rgba(255, 255, 255, 0.7);
   --bg-strong: rgba(255, 255, 255, 0.92);
   --text: #0f172a; /* slate-900 */
@@ -176,7 +176,7 @@
 }
 
 /* Offset sticky navbar down a bit from the viewport top */
-:global(.sticky-top) {
+.offsetTop {
   top: 12px;
 }
 

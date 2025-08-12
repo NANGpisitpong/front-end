@@ -43,7 +43,7 @@ export default function Navigation() {
   };
 
   return (
-    <nav className={`navbar navbar-expand-lg sticky-top ${theme === 'dark' ? 'navbar-dark' : 'navbar-light'} ${styles.navGlass}`} data-theme={theme} lang="th">
+    <nav className={`navbar navbar-expand-lg sticky-top ${styles.offsetTop} ${theme === 'dark' ? 'navbar-dark' : 'navbar-light'} ${styles.navGlass}`} data-theme={theme} lang="th">
       <div className="container-fluid">
         {/* โลโก้/แบรนด์ */}
         <Link className="navbar-brand d-flex align-items-center gap-2 m-0" href="/">
