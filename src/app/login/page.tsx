@@ -160,6 +160,23 @@ export default function Login() {
         ))}
       </div>
 
+      <Link
+        href="/Home"
+        className="back-btn"
+        aria-label="กลับหน้า Home"
+        style={{
+          position: 'fixed', top: 16, left: 16, zIndex: 9999,
+          display: 'inline-flex', alignItems: 'center', gap: '8px',
+          padding: '10px 14px', borderRadius: 12,
+          border: '1.5px solid #4ad8ff', color: '#e7f0ff', textDecoration: 'none',
+          background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(8px)',
+          boxShadow: '0 0 12px rgba(74,216,255,.4), inset 0 0 18px rgba(74,216,255,.12)',
+          fontWeight: 800
+        }}
+      >
+        <span className="back-arrow" style={{ fontSize: '1.2rem', lineHeight: 1 }}>◀</span>
+        กลับหน้า Home
+      </Link>
       <main className="login-page">
         <div className="login-card" ref={cardRef} role="region" aria-label="Login">
           <section className="panel form-panel">
@@ -181,7 +198,6 @@ export default function Login() {
                 id="email"
                 className="form-input"
                 type="email"
-                placeholder="you@domain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="username"

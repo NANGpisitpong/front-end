@@ -1,8 +1,4 @@
-/* ============================
-   login.css — Advanced UI (Modified)
-   ============================ */
 
-/* Variables */
 :root{
   --bg-dark-0: #05060a;
   --bg-dark-1: #071427;
@@ -30,7 +26,7 @@ body{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
-  font-size: 32px; /* เพิ่มขนาดฟอนต์ฐาน */
+  font-size: clamp(14px, 1.1vw + 8px, 18px); /* base font scales with viewport for zoom friendliness */
 }
 
 /* Layered background elements (divs from component) */
@@ -117,13 +113,15 @@ body{
 
 /* Page wrap */
 .login-page{
-  min-height:100vh; display:flex; align-items:center; justify-content:center; padding: clamp(16px, 2.5vw, 48px);
+  min-height:100svh; display:flex; align-items:center; justify-content:center; padding: clamp(16px, 2.5vw, 48px);
+  padding-block-start: calc(env(safe-area-inset-top,0px) + clamp(16px, 2.5vw, 48px));
+  padding-block-end: calc(env(safe-area-inset-bottom,0px) + clamp(16px, 2.5vw, 48px));
   position:relative; z-index:1;
 }
 
 /* Card */
 .login-card{
-  width:100%; max-width:var(--max-width); height: clamp(520px, 68vh, 820px);
+  width:100%; max-width:var(--max-width); height: clamp(520px, 68svh, 820px);
   border-radius: var(--card-radius); overflow:hidden;
   display:flex; gap:0; position:relative;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
@@ -146,11 +144,11 @@ body{
 .brand{ display:flex; align-items:center; gap:12px; margin-bottom:6px; user-select:none; }
 .logo{ height:56px; width:56px; border-radius:14px; display:flex; align-items:center; justify-content:center;
   background: linear-gradient(135deg, rgba(74,160,255,0.12), rgba(76,175,80,0.08)); font-size:24px; }
-.brand-title{ font-weight:800; font-size:1.3rem; color:var(--text); }
-.brand-sub{ font-size:1rem; color:var(--muted); }
+.brand-title{ font-weight:800; font-size: clamp(1rem, 1.4vw, 1.3rem); color:var(--text); }
+.brand-sub{ font-size: clamp(0.9rem, 1.2vw, 1.1rem); color:var(--muted); }
 
 /* Panel headings */
-.panel-heading{ margin:8px 0 18px; font-size: clamp(45px, 4vw, 45px); font-weight:800; color:var(--text); }
+.panel-heading{ margin:8px 0 18px; font-size: clamp(1.8rem, 2.4vw, 2.8rem); font-weight:800; color:var(--text); }
 
 /* Form */
 .panel-form{ display:flex; flex-direction:column; gap:14px; min-width:0; }
@@ -159,8 +157,8 @@ body{
 
 /* Input base */
 .form-input{
-  width:100%; padding:14px 16px; border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
-  border:1px solid rgba(255,255,255,0.04); color:var(--text); font-size:1.1rem; outline:none;
+  width:100%; padding:clamp(12px, 1.2vw, 16px) clamp(14px, 1.4vw, 18px); border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.04); color:var(--text); font-size: clamp(1rem, 1.1vw, 1.15rem); outline:none;
   transition: box-shadow .14s ease, transform .12s ease, border-color .12s ease; min-width:0;
   -webkit-appearance:none;
   appearance:none;
@@ -180,8 +178,8 @@ body{
 }
 
 .toggle-visibility {
-  height: 40px;
-  width: 40px;
+  height: clamp(36px, 3.2vw, 44px);
+  width: clamp(36px, 3.2vw, 44px);
   border-radius: 12px;
   border: none;
   background: rgb(22, 106, 161);
@@ -198,6 +196,7 @@ body{
 }
 
 .toggle-visibility:hover{ transform:translateY(-2px); background:rgb(0, 204, 255); }
+.toggle-visibility:active{ transform: translateY(0) scale(0.96); filter: brightness(0.96); }
 
 /* Row utilities */
 .row{ display:flex; gap:14px; align-items:center; }
@@ -211,9 +210,34 @@ body{
 /* Buttons */
 .btn{
   display:inline-flex; align-items:center; justify-content:center; gap:12px;
-  padding:14px 18px; border-radius:14px; border:none; cursor:pointer; font-weight:800; font-size:1.1rem;
+  padding: clamp(12px, 1.2vw, 16px) clamp(14px, 1.6vw, 20px); border-radius:14px; border:none; cursor:pointer; font-weight:800; font-size: clamp(1rem, 1.1vw, 1.2rem);
   transition: transform .12s ease, box-shadow .14s ease, filter .12s ease;
+  position: relative; overflow: hidden; isolation: isolate;
 }
+
+/* Press feedback */
+.btn:active{
+  transform: translateY(1px) scale(0.98);
+  filter: brightness(0.98);
+}
+
+/* Ripple effect */
+.btn::after{
+  content:""; position:absolute; left:50%; top:50%; width:12px; height:12px; border-radius:50%;
+  background: radial-gradient(circle, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 70%);
+  transform: translate(-50%,-50%) scale(0);
+  opacity:0; pointer-events:none;
+}
+.btn:active::after{ animation: ripple 480ms ease-out forwards; }
+@keyframes ripple{
+  0%{ opacity:.45; transform: translate(-50%,-50%) scale(0); }
+  100%{ opacity:0; transform: translate(-50%,-50%) scale(18); }
+}
+
+/* Variants on press */
+.btn.primary:active{ box-shadow: 0 10px 28px rgba(46,125,50,0.12); }
+.btn.ghost:active{ box-shadow: 0 8px 20px rgba(10,34,48,0.18) inset; }
+.btn.btn-google:active{ filter: brightness(0.96); box-shadow: 0 10px 24px rgba(10,34,48,0.12); }
 .btn.primary{
   color:white; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-emerald));
   box-shadow: 0 14px 40px rgba(46,125,50,0.08), 0 6px 20px rgba(22,33,72,0.10);
@@ -283,8 +307,8 @@ body{
   transform: translateZ(40px); 
   box-shadow: 0 10px 40px rgba(2,6,18,0.6);
 }
-.visual-caption h3{ margin:0 0 8px; font-size:1.5rem; font-weight:800; }
-.visual-caption p{ margin:0; color:var(--muted); font-size:1.2rem; line-height:1.4; }
+.visual-caption h3{ margin:0 0 8px; font-size: clamp(1.1rem, 1.8vw, 1.6rem); font-weight:800; }
+.visual-caption p{ margin:0; color:var(--muted); font-size: clamp(0.95rem, 1.3vw, 1.2rem); line-height:1.4; }
 
 /* Card hover micro interactions */
 .login-card:hover .visual-caption{ transform: translateZ(30px) translateY(-6px); }
@@ -344,6 +368,128 @@ body{
 /* super-wide / 4k */
 @media (min-width: 2200px) {
   :root { --max-width: 1800px; }
-  .login-card { height: 78vh; }
+  .login-card { height: 78svh; }
   .panel { padding: clamp(30px, 2.2vw, 80px); }
+}
+
+/* Ultra-wide aspect ratios */
+@media (min-aspect-ratio: 21/9) {
+  .login-card { height: min(62svh, 760px); }
+  .visual-panel { max-height: 420px; }
+}
+
+/* Tall/narrow aspect ratios */
+@media (max-aspect-ratio: 3/4) {
+  .login-card { height: auto; }
+  .visual-panel { height: 200px; min-height: 180px; }
+}
+
+/* Short viewport heights (landscape phones, docked windows) */
+@media (max-height: 600px) {
+  .login-card { height: auto; }
+  .visual-panel { height: 180px; }
+}
+
+/* Scale base font-size down on small screens to avoid overflow */
+@media (max-width: 768px) {
+  body { font-size: 18px; }
+}
+@media (max-width: 480px) {
+  body { font-size: 16px; }
+}
+
+/* Back button press feedback */
+.back-btn:active{
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 0 10px #4ad8ff;
+}
+
+/* Back Home futuristic button */
+.back-btn {
+  position: fixed;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 2px solid #4ad8ff;
+  color: #e7f0ff;
+  text-decoration: none;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 12px #4ad8ff55, inset 0 0 18px #4ad8ff22;
+  font-weight: 800;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: 0.3s ease-in-out;
+}
+
+/* Neon glow + shimmer animation */
+.back-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    rgba(74,216,255,0.2) 0%,
+    rgba(74,216,255,0.6) 50%,
+    rgba(74,216,255,0.2) 100%
+  );
+  transform: rotate(45deg);
+  animation: shimmer 2s infinite linear;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0%   { transform: rotate(45deg) translate(-100%, -100%); }
+  100% { transform: rotate(45deg) translate(100%, 100%); }
+}
+
+/* Hover glow + lift */
+.back-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 0 28px #4ad8ff99, inset 0 0 28px #4ad8ff44;
+}
+
+/* Click press effect */
+.back-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 16px #4ad8ff66, inset 0 0 22px #4ad8ff33;
+}
+
+/* Arrow micro animation */
+.back-arrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.back-btn:hover .back-arrow {
+  transform: translateX(-6px) rotate(-5deg);
+}
+.back-btn:active .back-arrow {
+  transform: translateX(-3px) scale(0.9);
+}
+
+/* Particle spark inside button */
+.back-btn span.btn-spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #4ad8ff;
+  top: 50%;
+  left: 50%;
+  animation: spark 1.2s infinite ease-in-out;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+@keyframes spark {
+  0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+  50%  { transform: translate(calc(-50% + 6px), calc(-50% - 6px)) scale(1); opacity: 0.5; }
+  100% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
 }

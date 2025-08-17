@@ -36,7 +36,7 @@ export default function HomeFuturistic() {
   const signals = useCountUp(982, 1600);
   const strategies = useCountUp(156, 1600);
 
-  // Ticker content (duplicated for seamless loop)
+  // Ticker content
   const ticker = useMemo(
     () => [
       'BTC +2.31%', 'ETH +1.12%', 'XAUUSD −0.42%', 'US500 +0.95%', 'EURUSD +0.18%',
@@ -45,6 +45,7 @@ export default function HomeFuturistic() {
     []
   );
 
+  // HERO background canvas (zoom/HiDPI/reduced-motion friendly)
   useEffect(() => {
     const canvas = document.getElementById('bg-chart') as HTMLCanvasElement;
     if (!canvas) return;
@@ -90,18 +91,11 @@ export default function HomeFuturistic() {
     if (heroRO && canvas.parentElement) heroRO.observe(canvas.parentElement);
 
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion) {
-      drawFrame();
-    } else {
-      rafId = requestAnimationFrame(draw);
-    }
+    if (reduceMotion) drawFrame(); else rafId = requestAnimationFrame(draw);
 
     const onVisibility = () => {
-      if (document.hidden) {
-        if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
-      } else if (!reduceMotion && !rafId) {
-        rafId = requestAnimationFrame(draw);
-      }
+      if (document.hidden) { if (rafId) { cancelAnimationFrame(rafId); rafId = 0; } }
+      else if (!reduceMotion && !rafId) { rafId = requestAnimationFrame(draw); }
     };
     document.addEventListener('visibilitychange', onVisibility);
 
@@ -114,6 +108,7 @@ export default function HomeFuturistic() {
     };
   }, []);
 
+  // SYSTEM canvases (wave, bars, radar) with ResizeObserver & reduced‑motion
   useEffect(() => {
     const wave = document.getElementById('sys-wave') as HTMLCanvasElement | null;
     const bars = document.getElementById('sys-bars') as HTMLCanvasElement | null;
@@ -283,16 +278,16 @@ export default function HomeFuturistic() {
             <Link href="/register" className="btn-neon primary">Get Started</Link>
             <Link href="/service" className="btn-neon ghost">Explore Tools</Link>
           </div>
-          <div className="hero-stats">
-            <div className="stat">
+          <div className="hero-stats" role="list" aria-label="Key metrics">
+            <div className="stat" role="listitem">
               <div className="num">{traders.toLocaleString()}+</div>
               <div className="label">Active Traders</div>
             </div>
-            <div className="stat">
+            <div className="stat" role="listitem">
               <div className="num">{signals.toLocaleString()}</div>
               <div className="label">AI Signals / day</div>
             </div>
-            <div className="stat">
+            <div className="stat" role="listitem">
               <div className="num">{strategies.toLocaleString()}</div>
               <div className="label">Strategies</div>
             </div>
@@ -300,25 +295,14 @@ export default function HomeFuturistic() {
         </div>
       </section>
 
-      {/* TICKER */}
-      <section className="ticker" aria-label="Market ticker">
-        <div className="ticker-track">
-          <div className="ticker-row">
-            {ticker.concat(ticker).map((t, i) => (
-              <span className="tick" key={i}>{t}</span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURES */}
-      <section className="features container">
+      {/* CORE CAPABILITIES */}
+      <section className="features container" aria-label="Core capabilities">
         <div className="holo-card">
           <div className="holo-glow" />
           <div className="holo-content">
             <i className="bi bi-cpu" aria-hidden="true" />
             <h3>AI Alpha</h3>
-            <p>แบบจำลองเชิงทำนายที่สแกนสัญญาณหลายตลาดด้วยการอนุมานแบบมิลลิวินาที</p>
+            <p>Predictive models scanning multi‑market signals with millisecond inference.</p>
           </div>
         </div>
         <div className="holo-card">
@@ -326,7 +310,7 @@ export default function HomeFuturistic() {
           <div className="holo-content">
             <i className="bi bi-speedometer2" aria-hidden="true" />
             <h3>Low Latency</h3>
-            <p>การกำหนดเส้นทางคำสั่งแบบเร่งความเร็วที่ขอบออกแบบมาเพื่อความเร็วภายใต้ภาระงานหนัก</p>
+            <p>Edge‑accelerated order routing engineered for speed under heavy load.</p>
           </div>
         </div>
         <div className="holo-card">
@@ -334,19 +318,19 @@ export default function HomeFuturistic() {
           <div className="holo-content">
             <i className="bi bi-shield-lock" aria-hidden="true" />
             <h3>Secure Core</h3>
-            <p>สถาปัตยกรรม Zero Trust ที่มีการเข้ารหัสหลายชั้นและการตรวจจับความผิดปกติ</p>
+            <p>Zero‑trust architecture with multi‑layer encryption and anomaly detection.</p>
           </div>
         </div>
       </section>
 
       {/* SYSTEMS VISUALS */}
-      <section className="features container">
+      <section className="features container" aria-label="Live systems visuals">
         <div className="holo-card">
           <div className="holo-glow" />
           <div className="holo-content">
             <h3>Wave Monitor</h3>
             <canvas id="sys-wave" className="canvas-visual cv-wave" style={{ width: '100%', display: 'block', pointerEvents: 'none' }} />
-            <p>สัญญาณคลื่นหลายความถี่จำลอง สะท้อนสภาวะความผันผวนแบบเรียลไทม์</p>
+            <p>สัญญาณคลื่นหลายความถี่จำลอง สะท้อนสภาว��ความผันผวนแบบเรียลไทม์</p>
           </div>
         </div>
         <div className="holo-card">
@@ -363,6 +347,48 @@ export default function HomeFuturistic() {
             <h3>Radar Sweep</h3>
             <canvas id="sys-radar" className="canvas-visual cv-radar" style={{ width: '100%', display: 'block', pointerEvents: 'none' }} />
             <p>ลำแสงกวาดแบบเรดาร์เพื่อค้นหาสัญญาณใหม่ เคลื่อนไหวนุ่มนวลต่อเนื่อง</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ANALYTICS SPLIT */}
+      <section className="container" aria-label="Analytics highlights" style={{ margin: '24px auto 36px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '18px' }}>
+          <div style={{
+            background: 'linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03))',
+            border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16,
+            boxShadow: '0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.04)'
+          }}>
+            <pre aria-label="Neon terminal" style={{
+              margin: 0, whiteSpace: 'pre-wrap', color: '#dbeafe',
+              textShadow: '0 0 8px rgba(34,197,94,.35)',
+              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
+            }}>
+{`> boot --neon --analytics\n✓ GPU kernels loaded\n✓ Signal graph compiled\n> subscribe markets: [BTC, XAUUSD, US500]\n> stream --fps 60 --latency <2ms\n> alerts --risk adaptive --mode conservative\n… running`}
+            </pre>
+          </div>
+          <div style={{
+            background: 'linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03))',
+            border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, padding: 16,
+            boxShadow: '0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.04)'
+          }}>
+            <h3 style={{ marginTop: 0 }}>Highlights</h3>
+            <ul style={{ margin: 0, paddingLeft: 18, color: '#93a4c7' }}>
+              <li>Streaming analytics with adaptive risk engine</li>
+              <li>Composable strategies with visual feedback</li>
+              <li>Low-latency routing and snapshot consistency</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* TICKER */}
+      <section className="ticker" aria-label="Market ticker">
+        <div className="ticker-track">
+          <div className="ticker-row">
+            {ticker.concat(ticker).map((t, i) => (
+              <span className="tick" key={i}>{t}</span>
+            ))}
           </div>
         </div>
       </section>
