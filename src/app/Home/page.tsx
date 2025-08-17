@@ -49,37 +49,67 @@ export default function HomeFuturistic() {
     const canvas = document.getElementById('bg-chart') as HTMLCanvasElement;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let w: number, h: number;
+    let w = 0, h = 0;
+    let points: { x: number; y: number }[] = [];
+    let rafId = 0;
+
     const resize = () => {
-      w = (canvas.width = window.innerWidth);
-      h = (canvas.height = window.innerHeight * 0.9);
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const parent = canvas.parentElement as HTMLElement | null;
+      const rect = parent ? parent.getBoundingClientRect() : { width: window.innerWidth, height: Math.floor(window.innerHeight * 0.9) } as any;
+      w = Math.floor(rect.width);
+      h = Math.floor(rect.height);
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      points = Array.from({ length: 40 }, (_, i) => ({ x: (w / 39) * i, y: h / 2 + Math.sin(i) * 40 }));
     };
-    resize();
-    window.addEventListener('resize', resize);
-    const points = Array.from({ length: 40 }, (_, i) => ({
-      x: (w / 39) * i,
-      y: h / 2 + Math.sin(i) * 40,
-    }));
-    let rafId: number;
-    const draw = () => {
+
+    const drawFrame = () => {
       if (!ctx) return;
       ctx.clearRect(0, 0, w, h);
       ctx.beginPath();
       ctx.moveTo(points[0].x, points[0].y);
-      for (let i = 1; i < points.length; i++) {
-        points[i].y += (Math.random() - 0.5) * 6;
-        ctx.lineTo(points[i].x, points[i].y);
-      }
+      for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
       ctx.strokeStyle = 'rgba(0,255,128,0.6)';
       ctx.lineWidth = 2;
       ctx.shadowColor = 'rgba(0,255,128,0.8)';
       ctx.shadowBlur = 15;
       ctx.stroke();
+    };
+
+    const draw = () => {
+      for (let i = 1; i < points.length; i++) points[i].y += (Math.random() - 0.5) * 6;
+      drawFrame();
       rafId = requestAnimationFrame(draw);
     };
-    rafId = requestAnimationFrame(draw);
+
+    resize();
+    window.addEventListener('resize', resize);
+    const heroRO = 'ResizeObserver' in window ? new ResizeObserver(() => resize()) : null;
+    if (heroRO && canvas.parentElement) heroRO.observe(canvas.parentElement);
+
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      drawFrame();
+    } else {
+      rafId = requestAnimationFrame(draw);
+    }
+
+    const onVisibility = () => {
+      if (document.hidden) {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+      } else if (!reduceMotion && !rafId) {
+        rafId = requestAnimationFrame(draw);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
     return () => {
       window.removeEventListener('resize', resize);
+      if (heroRO && canvas.parentElement) heroRO.unobserve(canvas.parentElement);
+      heroRO?.disconnect?.();
+      document.removeEventListener('visibilitychange', onVisibility);
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
@@ -89,28 +119,36 @@ export default function HomeFuturistic() {
     const bars = document.getElementById('sys-bars') as HTMLCanvasElement | null;
     const radar = document.getElementById('sys-radar') as HTMLCanvasElement | null;
 
-    const setCanvas = (canvas: HTMLCanvasElement, height: number) => {
+    const setCanvas = (canvas: HTMLCanvasElement, fallbackHeight: number) => {
       const dpr = Math.max(1, window.devicePixelRatio || 1);
       const ctx = canvas.getContext('2d');
       const resize = () => {
         const rectW = canvas.clientWidth || canvas.parentElement?.clientWidth || window.innerWidth;
+        const rectH = canvas.clientHeight || fallbackHeight;
         canvas.width = Math.floor(rectW * dpr);
-        canvas.height = Math.floor(height * dpr);
+        canvas.height = Math.floor(rectH * dpr);
         if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       };
       resize();
       return { ctx, resize } as const;
     };
 
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     let rafWave = 0, rafBars = 0, rafRadar = 0;
     let onWaveResize: ((this: Window, ev: UIEvent) => any) | undefined;
     let onBarsResize: ((this: Window, ev: UIEvent) => any) | undefined;
     let onRadarResize: ((this: Window, ev: UIEvent) => any) | undefined;
+    let restartWave: (() => void) | null = null;
+    let restartBars: (() => void) | null = null;
+    let restartRadar: (() => void) | null = null;
 
     if (wave) {
       const { ctx, resize } = setCanvas(wave, 180);
       onWaveResize = resize;
       window.addEventListener('resize', onWaveResize);
+      const roWave = 'ResizeObserver' in window ? new ResizeObserver(onWaveResize) : undefined;
+      roWave?.observe(wave);
       let t = 0;
       const drawWave = () => {
         if (!ctx) return;
@@ -127,15 +165,18 @@ export default function HomeFuturistic() {
         ctx.shadowBlur = 8;
         ctx.stroke();
         t += 2;
-        rafWave = requestAnimationFrame(drawWave);
+        if (!reduceMotion) rafWave = requestAnimationFrame(drawWave);
       };
-      rafWave = requestAnimationFrame(drawWave);
+      restartWave = () => { if (!rafWave && !reduceMotion) rafWave = requestAnimationFrame(drawWave); };
+      if (reduceMotion) drawWave(); else rafWave = requestAnimationFrame(drawWave);
     }
 
     if (bars) {
       const { ctx, resize } = setCanvas(bars, 180);
       onBarsResize = resize;
       window.addEventListener('resize', onBarsResize);
+      const roBars = 'ResizeObserver' in window ? new ResizeObserver(onBarsResize) : undefined;
+      roBars?.observe(bars);
       const n = 24; let vals = new Array(n).fill(0).map(() => Math.random());
       const drawBars = () => {
         if (!ctx) return;
@@ -155,15 +196,18 @@ export default function HomeFuturistic() {
           ctx!.shadowBlur = 8;
           ctx!.fillRect(x, y, bw, bh);
         });
-        rafBars = requestAnimationFrame(drawBars);
+        if (!reduceMotion) rafBars = requestAnimationFrame(drawBars);
       };
-      rafBars = requestAnimationFrame(drawBars);
+      restartBars = () => { if (!rafBars && !reduceMotion) rafBars = requestAnimationFrame(drawBars); };
+      if (reduceMotion) drawBars(); else rafBars = requestAnimationFrame(drawBars);
     }
 
     if (radar) {
       const { ctx, resize } = setCanvas(radar, 220);
       onRadarResize = resize;
       window.addEventListener('resize', onRadarResize);
+      const roRadar = 'ResizeObserver' in window ? new ResizeObserver(onRadarResize) : undefined;
+      roRadar?.observe(radar);
       let ang = 0;
       const drawRadar = () => {
         if (!ctx) return;
@@ -185,15 +229,30 @@ export default function HomeFuturistic() {
         ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(ang) * 110, cy + Math.sin(ang) * 110);
         ctx.stroke();
         ang += 0.04;
-        rafRadar = requestAnimationFrame(drawRadar);
+        if (!reduceMotion) rafRadar = requestAnimationFrame(drawRadar);
       };
-      rafRadar = requestAnimationFrame(drawRadar);
+      restartRadar = () => { if (!rafRadar && !reduceMotion) rafRadar = requestAnimationFrame(drawRadar); };
+      if (reduceMotion) drawRadar(); else rafRadar = requestAnimationFrame(drawRadar);
     }
+
+    const onVisibility = () => {
+      if (document.hidden) {
+        if (rafWave) { cancelAnimationFrame(rafWave); rafWave = 0; }
+        if (rafBars) { cancelAnimationFrame(rafBars); rafBars = 0; }
+        if (rafRadar) { cancelAnimationFrame(rafRadar); rafRadar = 0; }
+      } else if (!reduceMotion) {
+        if (restartWave) restartWave();
+        if (restartBars) restartBars();
+        if (restartRadar) restartRadar();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
 
     return () => {
       if (onWaveResize) window.removeEventListener('resize', onWaveResize);
       if (onBarsResize) window.removeEventListener('resize', onBarsResize);
       if (onRadarResize) window.removeEventListener('resize', onRadarResize);
+      document.removeEventListener('visibilitychange', onVisibility);
       if (rafWave) cancelAnimationFrame(rafWave);
       if (rafBars) cancelAnimationFrame(rafBars);
       if (rafRadar) cancelAnimationFrame(rafRadar);
@@ -204,7 +263,7 @@ export default function HomeFuturistic() {
     <main className="home-root">
       {/* HERO */}
       <section className="hero">
-        <canvas id="bg-chart" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}></canvas>
+        <canvas id="bg-chart" aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}></canvas>
         {/* layered bg */}
         <div className="hero-bg">
           <div className="hero-grid" aria-hidden="true" />
@@ -286,7 +345,7 @@ export default function HomeFuturistic() {
           <div className="holo-glow" />
           <div className="holo-content">
             <h3>Wave Monitor</h3>
-            <canvas id="sys-wave" style={{ width: '100%', height: 180, display: 'block', pointerEvents: 'none' }} />
+            <canvas id="sys-wave" className="canvas-visual cv-wave" style={{ width: '100%', display: 'block', pointerEvents: 'none' }} />
             <p>สัญญาณคลื่นหลายความถี่จำลอง สะท้อนสภาวะความผันผวนแบบเรียลไทม์</p>
           </div>
         </div>
@@ -294,15 +353,15 @@ export default function HomeFuturistic() {
           <div className="holo-glow" />
           <div className="holo-content">
             <h3>Pulse Bars</h3>
-            <canvas id="sys-bars" style={{ width: '100%', height: 180, display: 'block', pointerEvents: 'none' }} />
-            <p>พลังานของช่องสัญญาณปรับขึ้นลงแบบสุ่มถ่วงน้ำหนัก ให้ความรู้สึกเหมือนมิเตอร์ระบบ</p>
+            <canvas id="sys-bars" className="canvas-visual cv-bars" style={{ width: '100%', display: 'block', pointerEvents: 'none' }} />
+            <p>พลังงานของช่องสัญญาณปรับขึ้นลงแบบสุ่มถ่วงน้ำหนัก ให้ความรู้สึกเหมือนมิเตอร์ระบบ</p>
           </div>
         </div>
         <div className="holo-card">
           <div className="holo-glow" />
           <div className="holo-content">
             <h3>Radar Sweep</h3>
-            <canvas id="sys-radar" style={{ width: '100%', height: 220, display: 'block', pointerEvents: 'none' }} />
+            <canvas id="sys-radar" className="canvas-visual cv-radar" style={{ width: '100%', display: 'block', pointerEvents: 'none' }} />
             <p>ลำแสงกวาดแบบเรดาร์เพื่อค้นหาสัญญาณใหม่ เคลื่อนไหวนุ่มนวลต่อเนื่อง</p>
           </div>
         </div>
