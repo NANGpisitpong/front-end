@@ -8,10 +8,9 @@ import { mainNav, contactNav } from './navigation.config';
 
 export default function Navigation() {
   const pathname = usePathname();
-  // ซ่อนไม่ให้แสดงในบางหน้า
-  if (pathname === '/login' || pathname === '/' || pathname === '/register') return null;
 
-  // Theme toggle (จำสถานะด้วย localStorage)
+  
+  // Theme (auto from OS)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   // ติดตามธีมจากระบบ (OS) อัตโนมัติ ไม่ต้องมีปุ่มสลับ
   useEffect(() => {
@@ -36,19 +35,27 @@ export default function Navigation() {
     return (href: string) => (pathname === href || (pathname?.startsWith(href + '/') ?? false));
   }, [pathname]);
 
+  // Hide navigation on specific routes (after all hooks to preserve hook order)
+  if (pathname === '/login' || pathname === '/' || pathname === '/register') {
+    return null;
+  }
+
   // Link className compose
   const linkClass = (href: string) => {
-    const base = `nav-link fw-bold px-3 ${styles.navLink}`;
-    return isActive(href) ? `${base} ${styles.navLinkActive}` : base;
+    const base = ['nav-link', 'fw-bold', 'px-3', styles.navLink].filter(Boolean).join(' ');
+    return isActive(href) ? [base, styles.navLinkActive].filter(Boolean).join(' ') : base;
   };
 
   return (
-    <nav className={`navbar navbar-expand-lg sticky-top ${styles.offsetTop} ${theme === 'dark' ? 'navbar-dark' : 'navbar-light'} ${styles.navGlass}`} data-theme={theme} lang="th">
+    <nav className={['navbar','navbar-expand-lg','sticky-top',styles.offsetTop,theme === 'dark' ? 'navbar-dark' : 'navbar-light',styles.navGlass].filter(Boolean).join(' ')} data-theme={theme} lang="th">
       <div className="container-fluid">
         {/* โลโก้/แบรนด์ */}
         <Link className="navbar-brand d-flex align-items-center gap-2 m-0" href="/">
           <img src="/images/GreenPip-logo.png" alt="Logo" width={60} height={45} />
-          <span className={styles.brandText}>GreenPip</span>
+          <span className={styles.brandText}>
+            <span className={styles.brandGreen}>Green</span>
+            <span className={styles.brandPip}>Pip</span>
+          </span>
           <span className={styles.brandBadge}>BETA</span>
         </Link>
 
@@ -78,7 +85,7 @@ export default function Navigation() {
 
             <li className="nav-item dropdown">
               <a
-                className={`nav-link dropdown-toggle px-3 rounded ${styles.navLink}`}
+                className={['nav-link','dropdown-toggle','px-3','rounded',styles.navLink].filter(Boolean).join(' ')}
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
@@ -87,10 +94,10 @@ export default function Navigation() {
               >
                 Contact
               </a>
-              <ul className={`dropdown-menu ${styles.dropdownMenu}`}>
+              <ul className={['dropdown-menu', styles.dropdownMenu].filter(Boolean).join(' ')}>
                 {contactNav.map((c) => (
                   <li key={c.label}>
-                    <a className={`dropdown-item ${styles.dropdownItem}`} href={c.href} target={c.external ? '_blank' : undefined} rel={c.external ? 'noreferrer' : undefined}>
+                    <a className={['dropdown-item', styles.dropdownItem].filter(Boolean).join(' ')} href={c.href} target={c.external ? '_blank' : undefined} rel={c.external ? 'noreferrer' : undefined}>
                       {c.label}
                     </a>
                   </li>
@@ -100,13 +107,13 @@ export default function Navigation() {
           </ul>
 
           {/* เส้นคั่นเมื่ออยู่ในมือถือ */}
-          <div className={`d-lg-none my-2 ${styles.mobileDivider}`} />
+          <div className={['d-lg-none','my-2',styles.mobileDivider].filter(Boolean).join(' ')} />
 
           {/* ปุ่มด้านขวา */}
           <div className="d-flex gap-2 ms-lg-auto align-items-center">
-            
-            <Link href="/login" className={`btn btn-sm fw-bold btn-outline-success ${styles.btnGlow}`}>เข้าสู่ระบบ</Link>
-            <Link href="/register" className={`btn btn-success btn-sm fw-bold ${styles.btnGlow}`}>สมัครสมาชิก</Link>
+            <Link href="/admin/user" className={['btn','btn-sm','fw-bold','btn-outline-success',styles.btnGlow].filter(Boolean).join(' ')}>💀</Link>
+            <Link href="/login" className={['btn','btn-sm','fw-bold','btn-outline-success',styles.btnGlow].filter(Boolean).join(' ')}>เข้าสู่ระบบ</Link>
+            <Link href="/register" className={['btn','btn-success','btn-sm','fw-bold',styles.btnGlow].filter(Boolean).join(' ')}>สมัครสมาชิก</Link>
           </div>
         </div>
       </div>
