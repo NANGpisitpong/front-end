@@ -147,7 +147,7 @@ export default function HomeFuturistic() {
       const { ctx, resize } = setCanvas(wave, 180);
       onWaveResize = resize;
       window.addEventListener('resize', onWaveResize);
-      const roWave = 'ResizeObserver' in window ? new ResizeObserver(onWaveResize) : undefined;
+      const roWave = 'ResizeObserver' in window ? new ResizeObserver(() => resize()) : undefined;
       roWave?.observe(wave);
       let t = 0;
       const drawWave = () => {
@@ -175,7 +175,7 @@ export default function HomeFuturistic() {
       const { ctx, resize } = setCanvas(bars, 180);
       onBarsResize = resize;
       window.addEventListener('resize', onBarsResize);
-      const roBars = 'ResizeObserver' in window ? new ResizeObserver(onBarsResize) : undefined;
+      const roBars = 'ResizeObserver' in window ? new ResizeObserver(() => resize()) : undefined;
       roBars?.observe(bars);
       const n = 24; let vals = new Array(n).fill(0).map(() => Math.random());
       const drawBars = () => {
@@ -206,7 +206,7 @@ export default function HomeFuturistic() {
       const { ctx, resize } = setCanvas(radar, 220);
       onRadarResize = resize;
       window.addEventListener('resize', onRadarResize);
-      const roRadar = 'ResizeObserver' in window ? new ResizeObserver(onRadarResize) : undefined;
+      const roRadar = 'ResizeObserver' in window ? new ResizeObserver(() => resize()) : undefined;
       roRadar?.observe(radar);
       let ang = 0;
       const drawRadar = () => {
