@@ -1,15 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Pagination, Navigation, Autoplay } from 'swiper/modules';
-
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
 
 import './home.css';
 
@@ -92,6 +84,122 @@ export default function HomeFuturistic() {
     };
   }, []);
 
+  useEffect(() => {
+    const wave = document.getElementById('sys-wave') as HTMLCanvasElement | null;
+    const bars = document.getElementById('sys-bars') as HTMLCanvasElement | null;
+    const radar = document.getElementById('sys-radar') as HTMLCanvasElement | null;
+
+    const setCanvas = (canvas: HTMLCanvasElement, height: number) => {
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const ctx = canvas.getContext('2d');
+      const resize = () => {
+        const rectW = canvas.clientWidth || canvas.parentElement?.clientWidth || window.innerWidth;
+        canvas.width = Math.floor(rectW * dpr);
+        canvas.height = Math.floor(height * dpr);
+        if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+      resize();
+      return { ctx, resize } as const;
+    };
+
+    let rafWave = 0, rafBars = 0, rafRadar = 0;
+    let onWaveResize: ((this: Window, ev: UIEvent) => any) | undefined;
+    let onBarsResize: ((this: Window, ev: UIEvent) => any) | undefined;
+    let onRadarResize: ((this: Window, ev: UIEvent) => any) | undefined;
+
+    if (wave) {
+      const { ctx, resize } = setCanvas(wave, 180);
+      onWaveResize = resize;
+      window.addEventListener('resize', onWaveResize);
+      let t = 0;
+      const drawWave = () => {
+        if (!ctx) return;
+        const w = wave.clientWidth; const h = 180;
+        ctx.clearRect(0, 0, w, h);
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 8) {
+          const y = h / 2 + Math.sin((x + t) / 60) * 24 + Math.sin((x + t) / 18) * 6;
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = 'rgba(34,197,94,0.8)';
+        ctx.lineWidth = 2;
+        ctx.shadowColor = 'rgba(34,197,94,0.8)';
+        ctx.shadowBlur = 8;
+        ctx.stroke();
+        t += 2;
+        rafWave = requestAnimationFrame(drawWave);
+      };
+      rafWave = requestAnimationFrame(drawWave);
+    }
+
+    if (bars) {
+      const { ctx, resize } = setCanvas(bars, 180);
+      onBarsResize = resize;
+      window.addEventListener('resize', onBarsResize);
+      const n = 24; let vals = new Array(n).fill(0).map(() => Math.random());
+      const drawBars = () => {
+        if (!ctx) return;
+        const w = bars.clientWidth; const h = 180;
+        ctx.clearRect(0, 0, w, h);
+        const bw = w / (n * 1.5);
+        vals = vals.map(v => Math.min(1, Math.max(0, v + (Math.random() - 0.5) * 0.2)));
+        vals.forEach((v, i) => {
+          const x = i * bw * 1.5 + 8;
+          const bh = v * (h * 0.75);
+          const y = h - bh;
+          const g = ctx!.createLinearGradient(0, y, 0, h);
+          g.addColorStop(0, 'rgba(250,204,21,0.9)');
+          g.addColorStop(1, 'rgba(34,197,94,0.5)');
+          ctx!.fillStyle = g;
+          ctx!.shadowColor = 'rgba(250,204,21,0.6)';
+          ctx!.shadowBlur = 8;
+          ctx!.fillRect(x, y, bw, bh);
+        });
+        rafBars = requestAnimationFrame(drawBars);
+      };
+      rafBars = requestAnimationFrame(drawBars);
+    }
+
+    if (radar) {
+      const { ctx, resize } = setCanvas(radar, 220);
+      onRadarResize = resize;
+      window.addEventListener('resize', onRadarResize);
+      let ang = 0;
+      const drawRadar = () => {
+        if (!ctx) return;
+        const w = radar.clientWidth; const h = 220; const cx = w / 2, cy = h / 2;
+        ctx.clearRect(0, 0, w, h);
+        ctx.strokeStyle = 'rgba(34,197,94,0.4)';
+        ctx.lineWidth = 1; ctx.shadowBlur = 0; ctx.beginPath();
+        [40, 80, 110].forEach(r => { ctx.moveTo(cx + r, cy); ctx.arc(cx, cy, r, 0, Math.PI * 2); });
+        ctx.stroke();
+        const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, 110);
+        grd.addColorStop(0, 'rgba(34,197,94,0.45)');
+        grd.addColorStop(1, 'rgba(34,197,94,0)');
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, 110, ang, ang + Math.PI / 5);
+        ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = 'rgba(34,197,94,0.9)'; ctx.lineWidth = 2; ctx.beginPath();
+        ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(ang) * 110, cy + Math.sin(ang) * 110);
+        ctx.stroke();
+        ang += 0.04;
+        rafRadar = requestAnimationFrame(drawRadar);
+      };
+      rafRadar = requestAnimationFrame(drawRadar);
+    }
+
+    return () => {
+      if (onWaveResize) window.removeEventListener('resize', onWaveResize);
+      if (onBarsResize) window.removeEventListener('resize', onBarsResize);
+      if (onRadarResize) window.removeEventListener('resize', onRadarResize);
+      if (rafWave) cancelAnimationFrame(rafWave);
+      if (rafBars) cancelAnimationFrame(rafBars);
+      if (rafRadar) cancelAnimationFrame(rafRadar);
+    };
+  }, []);
+
   return (
     <main className="home-root">
       {/* HERO */}
@@ -151,7 +259,7 @@ export default function HomeFuturistic() {
           <div className="holo-content">
             <i className="bi bi-cpu" aria-hidden="true" />
             <h3>AI Alpha</h3>
-            <p>Predictive models scanning multi‑market signals with millisecond inference.</p>
+            <p>แบบจำลองเชิงทำนายที่สแกนสัญญาณหลายตลาดด้วยการอนุมานแบบมิลลิวินาที</p>
           </div>
         </div>
         <div className="holo-card">
@@ -159,7 +267,7 @@ export default function HomeFuturistic() {
           <div className="holo-content">
             <i className="bi bi-speedometer2" aria-hidden="true" />
             <h3>Low Latency</h3>
-            <p>Edge‑accelerated order routing engineered for speed under heavy load.</p>
+            <p>การกำหนดเส้นทางคำสั่งแบบเร่งความเร็วที่ขอบออกแบบมาเพื่อความเร็วภายใต้ภาระงานหนัก</p>
           </div>
         </div>
         <div className="holo-card">
@@ -167,44 +275,37 @@ export default function HomeFuturistic() {
           <div className="holo-content">
             <i className="bi bi-shield-lock" aria-hidden="true" />
             <h3>Secure Core</h3>
-            <p>Zero‑trust architecture with multi‑layer encryption and anomaly detection.</p>
+            <p>สถาปัตยกรรม Zero Trust ที่มีการเข้ารหัสหลายชั้นและการตรวจจับความผิดปกติ</p>
           </div>
         </div>
       </section>
 
-      {/* TRENDING CAROUSEL */}
-      <section className="carousel-wrapper">
-        <h2 className="carousel-title">Hot trend</h2>
-        <Swiper
-          effect={'coverflow'}
-          grabCursor={true}
-          centeredSlides={true}
-          slidesPerView={'auto'}
-          loop={true}
-          autoplay={{ delay: 2500, disableOnInteraction: false }}
-          coverflowEffect={{ rotate: 55, stretch: 0, depth: 150, modifier: 1.8, slideShadows: true }}
-          pagination={{ clickable: true }}
-          navigation={true}
-          modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
-          className="mySwiper"
-        >
-          <SwiperSlide className="slide">
-            <Image src="/images/01.jpg" alt="Slide 1" width={400} height={500} />
-            <div className="slide-caption">XAUUSD - Gold</div>
-          </SwiperSlide>
-          <SwiperSlide className="slide">
-            <Image src="/images/02.png" alt="Slide 2" width={400} height={500} />
-            <div className="slide-caption">BTC - Bitcoin</div>
-          </SwiperSlide>
-          <SwiperSlide className="slide">
-            <Image src="/images/03.jpg" alt="Slide 3" width={400} height={500} />
-            <div className="slide-caption">US500 - S&P 500</div>
-          </SwiperSlide>
-          <SwiperSlide className="slide">
-            <Image src="/images/04.png" alt="Slide 4" width={400} height={500} />
-            <div className="slide-caption">ETH - Ethereum</div>
-          </SwiperSlide>
-        </Swiper>
+      {/* SYSTEMS VISUALS */}
+      <section className="features container">
+        <div className="holo-card">
+          <div className="holo-glow" />
+          <div className="holo-content">
+            <h3>Wave Monitor</h3>
+            <canvas id="sys-wave" style={{ width: '100%', height: 180, display: 'block', pointerEvents: 'none' }} />
+            <p>สัญญาณคลื่นหลายความถี่จำลอง สะท้อนสภาวะความผันผวนแบบเรียลไทม์</p>
+          </div>
+        </div>
+        <div className="holo-card">
+          <div className="holo-glow" />
+          <div className="holo-content">
+            <h3>Pulse Bars</h3>
+            <canvas id="sys-bars" style={{ width: '100%', height: 180, display: 'block', pointerEvents: 'none' }} />
+            <p>พลังานของช่องสัญญาณปรับขึ้นลงแบบสุ่มถ่วงน้ำหนัก ให้ความรู้สึกเหมือนมิเตอร์ระบบ</p>
+          </div>
+        </div>
+        <div className="holo-card">
+          <div className="holo-glow" />
+          <div className="holo-content">
+            <h3>Radar Sweep</h3>
+            <canvas id="sys-radar" style={{ width: '100%', height: 220, display: 'block', pointerEvents: 'none' }} />
+            <p>ลำแสงกวาดแบบเรดาร์เพื่อค้นหาสัญญาณใหม่ เคลื่อนไหวนุ่มนวลต่อเนื่อง</p>
+          </div>
+        </div>
       </section>
 
       {/* CTA STRIPE */}
