@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Navigation from './Navigation';
 import Footer from './Footer';
@@ -12,40 +12,43 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const hideLayout = pathname === '/login' || pathname === '/register';
 
   const [isLoading, setIsLoading] = useState(false);
-  const [animKey, setAnimKey] = useState(0);
+  const [exitNode, setExitNode] = useState<React.ReactNode | null>(null);
+  const lastChildrenRef = useRef<React.ReactNode>(children);
 
-  // Smooth route change effect (fade/slide + overlay)
+  // keep reference of last rendered children for exit animation snapshot
   useEffect(() => {
-    // Trigger overlay + slight dim
+    lastChildrenRef.current = children;
+  }, [children]);
+
+  // Smooth route change effect (stacked exit/enter + overlay)
+  useEffect(() => {
+    // mount snapshot of previous content in exit layer
+    setExitNode(lastChildrenRef.current);
+    // show overlay for a short moment
     setIsLoading(true);
 
-    // Start enter animation key update to re-trigger CSS animation
-    setAnimKey((k) => k + 1);
+    const timer = setTimeout(() => {
+      setExitNode(null); // remove exit layer after animation
+      setIsLoading(false); // hide overlay
+    }, 480); // keep in sync with CSS durations (~0.42s)
 
-    const t = setTimeout(() => {
-      // Hide overlay after short delay (let page mount/paint)
-      setIsLoading(false);
-    }, 450); // duration should align with CSS
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
   }, [pathname]);
   return (
     <>
-      {/* Optional existing overlay, kept for compatibility */}
       {isLoading && <LoadingOverlay />}
-
-      {/* New gradient overlay for smoother transitions */}
       <div className={["route-overlay", isLoading ? 'visible' : ''].join(' ')} aria-hidden="true" />
-
       {!hideLayout && <Navigation />}
-
-      <div
-        key={animKey}
-        className={['route-container','route-animate-in'].join(' ')}
-        style={{ opacity: isLoading ? 0.6 : 1 }}
-      >
-        {children}
+      <div className="route-stack">
+        {exitNode && (
+          <div className="route-layer route-exit">
+            {exitNode}
+          </div>
+        )}
+        <div className="route-layer route-enter">
+          {children}
+        </div>
       </div>
-
       {!hideLayout && !pathname.startsWith('/admin/user/edit') && <Footer />}
     </>
   );
