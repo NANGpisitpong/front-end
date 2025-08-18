@@ -19,7 +19,7 @@ body {
   border-radius: 12px;
   padding: 32px;
   width: 100%;
-  max-width: 1200px;
+  max-width: calc(100vw - 40px);
   box-shadow: 0 0 20px rgba(0, 255, 138, 0.15);
 }
 
@@ -59,15 +59,19 @@ body {
 
 /* ==== Table ==== */
 .table-container {
-  overflow-x: auto;
+  overflow-x: visible;
+  overflow-y: visible;
 }
 
 .user-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   margin-top: 20px;
   color: #e0ffe0;
   font-size: 0.9rem;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
 .user-table th,
@@ -75,6 +79,9 @@ body {
   border: 1px solid #00ff85;
   padding: 8px 12px;
   text-align: center;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .user-table thead {

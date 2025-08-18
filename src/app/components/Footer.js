@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 
 export default function Footer() {
   const pathname = usePathname();
-  if (pathname === '/login' || pathname === '/register' || pathname === '/' || pathname === '/Home') return null;
+  if (pathname === '/login' || pathname === '/register' || pathname === '/' || pathname === '/Home' || pathname === ('/admin/user/edit')) return null;
 
   return (
     <div className="container-fluid">
