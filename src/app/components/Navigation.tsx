@@ -97,9 +97,23 @@ export default function Navigation() {
               <ul className={['dropdown-menu', styles.dropdownMenu].filter(Boolean).join(' ')}>
                 {contactNav.map((c) => (
                   <li key={c.label}>
-                    <a className={['dropdown-item', styles.dropdownItem].filter(Boolean).join(' ')} href={c.href} target={c.external ? '_blank' : undefined} rel={c.external ? 'noreferrer' : undefined}>
-                      {c.label}
-                    </a>
+                      {c.external ? (
+                        <a
+                          className={['dropdown-item', styles.dropdownItem].filter(Boolean).join(' ')}
+                          href={c.href}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {c.label}
+                        </a>
+                      ) : (
+                        <Link
+                          className={['dropdown-item', styles.dropdownItem].filter(Boolean).join(' ')}
+                          href={c.href}
+                        >
+                          {c.label}
+                        </Link>
+                      )}
                   </li>
                 ))}
               </ul>

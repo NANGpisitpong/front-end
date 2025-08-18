@@ -1,0 +1,43 @@
+/* Layout route transitions — smooth fade/slide + overlay */
+
+.route-container {
+  transition: opacity .35s ease, transform .35s ease, filter .35s ease;
+}
+.route-animate-in {
+  animation: fadeSlideIn .45s ease forwards;
+}
+@keyframes fadeSlideIn {
+  from { opacity: .75; transform: translateY(8px) scale(.995); filter: blur(2px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* Fullscreen overlay during route switching */
+.route-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none; /* visual only, let clicks through unless you want to block */
+  opacity: 0;
+  background:
+    radial-gradient(1200px 700px at -15% -20%, rgba(0,255,159,.14), transparent 60%),
+    radial-gradient(1000px 700px at 115% 120%, rgba(64,152,240,.16), transparent 60%),
+    linear-gradient(120deg, rgba(5,9,20,.85) 0%, rgba(10,22,48,.85) 100%);
+  backdrop-filter: blur(8px) saturate(140%);
+  transition: opacity .25s ease;
+}
+.route-overlay.visible {
+  opacity: 1;
+}
+.route-overlay::after {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none; opacity: .35;
+  background:
+    repeating-linear-gradient(135deg, rgba(34,197,94,.18) 0 2px, transparent 2px 26px),
+    repeating-linear-gradient(-135deg, rgba(250,204,21,.14) 0 2px, transparent 2px 26px);
+  animation: graphRun 16s linear infinite;
+}
+@keyframes graphRun {
+  0% { background-position: 0 0, 0 0; }
+  50% { background-position: 240px 0, 0 240px; }
+  100% { background-position: 0 0, 0 0; }
+}

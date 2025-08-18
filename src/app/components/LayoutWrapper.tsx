@@ -5,31 +5,47 @@ import { usePathname } from 'next/navigation';
 import Navigation from './Navigation';
 import Footer from './Footer';
 import LoadingOverlay from './LoadingOverlay'; // 
+import './LayoutWrapper.css'; 
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const hideLayout = pathname === '/login' || pathname === '/register';
 
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPath, setCurrentPath] = useState(pathname);
+  const [animKey, setAnimKey] = useState(0);
 
-useEffect(() => {
-  if (pathname !== currentPath) {
+  // Smooth route change effect (fade/slide + overlay)
+  useEffect(() => {
+    // Trigger overlay + slight dim
     setIsLoading(true);
-    const timer = setTimeout(() => {
-      window.location.reload();
-    }, 400); // ปรับเวลาตามความต้องการ (400ms)
-    return () => clearTimeout(timer);
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [pathname]);
+
+    // Start enter animation key update to re-trigger CSS animation
+    setAnimKey((k) => k + 1);
+
+    const t = setTimeout(() => {
+      // Hide overlay after short delay (let page mount/paint)
+      setIsLoading(false);
+    }, 450); // duration should align with CSS
+    return () => clearTimeout(t);
+  }, [pathname]);
   return (
     <>
+      {/* Optional existing overlay, kept for compatibility */}
       {isLoading && <LoadingOverlay />}
+
+      {/* New gradient overlay for smoother transitions */}
+      <div className={["route-overlay", isLoading ? 'visible' : ''].join(' ')} aria-hidden="true" />
+
       {!hideLayout && <Navigation />}
-      <div style={{ opacity: isLoading ? 0.3 : 1, transition: 'opacity 0.3s' }}>
+
+      <div
+        key={animKey}
+        className={['route-container','route-animate-in'].join(' ')}
+        style={{ opacity: isLoading ? 0.6 : 1 }}
+      >
         {children}
       </div>
+
       {!hideLayout && !pathname.startsWith('/admin/user/edit') && <Footer />}
     </>
   );
