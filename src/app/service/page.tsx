@@ -120,7 +120,7 @@ const candleOptions = {
     }
   },
   scales: { 
-    x: { type: 'category', grid: { color: 'rgba(255,255,255,0.1)' } },
+    x: { type: "category" as const, grid: { color: 'rgba(255,255,255,0.1)' } },
     y: { grid: { color: 'rgba(255,255,255,0.1)' } }
   }
 }
