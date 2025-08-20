@@ -176,7 +176,6 @@
               </>
             ) : (
               <>
-                <Link href="/admin/user" className={['btn','btn-sm','fw-bold','btn-outline-success',styles.btnGlow].filter(Boolean).join(' ')}>ADMIN</Link>
                 <Link href="/login" className={['btn','btn-sm','fw-bold','btn-outline-success',styles.btnGlow].filter(Boolean).join(' ')}>เข้าสู่ระบบ</Link>
                 <Link href="/register" className={['btn','btn-success','btn-sm','fw-bold',styles.btnGlow].filter(Boolean).join(' ')}>สมัครสมาชิก</Link>
               </>

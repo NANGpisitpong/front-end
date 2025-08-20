@@ -1,322 +1,214 @@
-/* === โหดมาก Neon Glitch + Flicker + Pulse === */
+/* Navigation.module.css */
 
-.navGlass {
-  background: rgba(10, 15, 26, 0.85);
-  backdrop-filter: saturate(200%) blur(16px);
-  box-shadow:
-    0 0 30px #22c55e,
-    0 0 60px #84cc16,
-    inset 0 0 40px #22c55e,
-    inset 0 0 80px #bef264;
-  border-bottom: 2px solid #22c55e;
-  position: relative;
-  z-index: 1100;
-  transition: background-color 0.3s ease;
+/* ===== Base glass nav ===== */
+.offsetTop {
+  top: 0;
+  z-index: 9999;
 }
 
-/* Brand style with flicker + glitch */
-
-.brandText {
-  font-weight: 900;
-  font-size: 1.6rem;
-  letter-spacing: 0.15em;
-  color: #a3e635;
+.navGlass {
+  background: linear-gradient(135deg, rgba(10,12,20,0.9), rgba(0,0,0,0.75));
+  backdrop-filter: blur(14px) saturate(180%);
+  border-bottom: 1px solid rgba(0, 255, 150, 0.4);
+  box-shadow: inset 0 0 20px rgba(0,255,180,0.15), 0 0 20px rgba(0,255,150,0.25);
   position: relative;
-  user-select: none;
-  text-transform: uppercase;
-  animation: flickerNeon 2s infinite;
-  filter: drop-shadow(0 0 8px #22c55e);
+  overflow: hidden;
+}
+
+/* animated grid overlay (cyber style) */
+.navGlass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,255,150,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,180,0.06) 1px, transparent 1px);
+  background-size: 30px 30px;
+  animation: moveGrid 20s linear infinite;
+  z-index: 0;
+}
+
+@keyframes moveGrid {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 60px 60px, 60px 60px; }
+}
+
+/* subtle glowing lines like a stock chart pulse */
+.navGlass::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -50%;
+  width: 200%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(0,255,180,0.1), transparent);
+  animation: scanLight 6s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes scanLight {
+  0% { transform: translateX(-50%); opacity: 0; }
+  50% { transform: translateX(50%); opacity: 1; }
+  100% { transform: translateX(150%); opacity: 0; }
+}
+
+/* ===== Brand ===== */
+.brandText {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: baseline;
+  z-index: 2;
 }
 
 .brandGreen {
-  color: #22c55e;
-  text-shadow:
-    0 0 6px #22c55e,
-    0 0 12px #84cc16;
-  animation: glitchTop 3s infinite linear alternate;
+  color: #00ff9d;
+  text-shadow: 0 0 8px rgba(0,255,180,0.8), 0 0 15px rgba(0,255,120,0.4);
 }
 
 .brandPip {
-  color: #bef264;
-  text-shadow:
-    0 0 8px #bef264,
-    0 0 14px #a3e635;
-  animation: glitchBottom 3s infinite linear alternate;
+  color: #ffe100;
+  text-shadow: 0 0 5px rgb(255, 255, 0);
 }
 
 .brandBadge {
-  font-size: 0.7rem;
-  font-weight: 900;
-  background: linear-gradient(45deg, #bef264, #22c55e);
-  color: #0a0f1a;
-  padding: 3px 12px;
-  border-radius: 20px;
-  box-shadow: 0 0 16px #22c55e;
-  margin-left: 10px;
-  user-select: none;
-  animation: pulseGlow 3s infinite;
+  background: linear-gradient(135deg, #ff1e56, #ffac41);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  margin-left: 0.3rem;
+  box-shadow: 0 0 8px rgba(255,120,0,0.6);
 }
 
-/* Nav Link base - glitch + neon flicker */
-
-.nav-link {
-  color: #c8f2c8;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+/* ===== Nav links ===== */
+.navLink {
   position: relative;
-  padding: 0.6rem 1rem;
-  cursor: pointer;
-  user-select: none;
+  color: #ffffff !important;
+  font-weight: 500;
   transition: color 0.3s ease;
-  text-shadow:
-    0 0 8px #22c55e,
-    0 0 14px #84cc16,
-    0 0 20px #bef264;
-  animation: flickerNeon 2.5s infinite alternate;
+  z-index: 2;
 }
 
-.nav-link::before,
-.nav-link::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  right: 0;
-  opacity: 0.8;
-  clip: rect(0, 0, 0, 0);
-  text-shadow: -2px 0 #22c55e, 2px 0 #bef264;
-  animation: glitchEffect 2s infinite;
+.navLink:hover {
+  color: #00ffe0 !important;
+  text-shadow: 0 0 6px rgba(0,255,230,0.8);
 }
 
-.nav-link::before {
-  animation-delay: -0.2s;
-  clip: rect(2px, 9999px, 6px, 0);
-}
-
-.nav-link::after {
-  animation-delay: -0.4s;
-  clip: rect(10px, 9999px, 14px, 0);
-}
-
-/* Active link stronger glow + pulse */
 .navLinkActive {
-  color: #bef264;
-  text-shadow:
-    0 0 14px #bef264,
-    0 0 30px #a3e635,
-    0 0 50px #22c55e;
-  animation: pulseGlow 3s infinite alternate;
-  font-weight: 900;
-}
-
-/* Dropdown menu with neon border and glow */
-.dropdown-menu {
-  background: rgba(10, 15, 26, 0.95);
-  backdrop-filter: saturate(220%) blur(18px);
-  border-radius: 16px;
-  border: 2px solid #22c55e;
-  box-shadow:
-    0 0 20px #22c55e,
-    0 0 40px #bef264,
-    inset 0 0 50px #22c55e;
-  min-width: 14rem;
-  padding: 0.6rem 0;
+  color: #00ffb7 !important;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  user-select: none;
-  z-index: 1200;
 }
 
-/* Dropdown items with neon hover */
-.dropdown-item {
-  color: #c8f2c8;
-  padding: 0.6rem 1.8rem;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  user-select: none;
-  text-shadow:
-    0 0 6px #22c55e;
+.navLinkActive::before {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 15%;
+  width: 70%;
+  height: 3px;
+  background: linear-gradient(90deg, #00ff88, #00cfff, #00ff88);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: activeGlow 2.5s ease infinite;
 }
 
-.dropdown-item:hover,
-.dropdown-item:focus {
-  background: #22c55e;
-  color: #0a0f1a;
-  text-shadow:
-    0 0 12px #bef264,
-    0 0 24px #22c55e,
-    0 0 40px #bef264;
-  outline: none;
-  transform: scale(1.05);
+@keyframes activeGlow {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 0%; }
+  100% { background-position: 0% 0%; }
 }
 
-/* Buttons neon style */
+/* ===== Dropdown ===== */
+.dropdownMenu {
+  background: rgba(12, 14, 24, 0.95);
+  border: 1px solid rgba(0,255,150,0.25);
+  box-shadow: 0 0 18px rgba(0,255,150,0.25);
+  animation: fadeIn 0.3s ease;
+  z-index: 3;
+}
+
+.dropdownItem {
+  color: #d1d5db;
+  font-weight: 500;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.dropdownItem:hover {
+  background: rgba(0,255,150,0.15);
+  color: #00ff88;
+  text-shadow: 0 0 4px rgba(0,255,136,0.6);
+}
+
+/* ===== Buttons glow ===== */
 .btnGlow {
-  border-radius: 12px !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.1em;
-  box-shadow:
-    0 0 12px #22c55e,
-    0 0 32px #bef264,
-    inset 0 0 24px #22c55e;
-  transition: all 0.3s ease;
-  user-select: none;
-  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  z-index: 2;
 }
 
-.btn-outline-success {
-  border-color: #22c55e !important;
-  color: #bef264 !important;
-  background: transparent !important;
+.btnGlow:hover {
+  box-shadow: 0 0 14px rgba(0,255,180,0.7), inset 0 0 6px rgba(0,255,180,0.4);
 }
 
-.btn-outline-success:hover,
-.btn-outline-success:focus {
-  background: #22c55e !important;
-  color: #0a0f1a !important;
-  box-shadow:
-    0 0 22px #22c55e,
-    0 0 48px #bef264,
-    inset 0 0 36px #22c55e;
-  transform: scale(1.1);
+.btnGlow::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(0,255,136,0.2) 25%,
+    transparent 50%,
+    rgba(0,255,200,0.2) 75%,
+    transparent 100%
+  );
+  animation: rotateGlow 4s linear infinite;
+  z-index: 0;
 }
 
-.btn-outline-danger {
-  border-color: #ef4444 !important;
-  color: #f87171 !important;
-  background: transparent !important;
-  box-shadow:
-    0 0 10px #ef4444;
+.btnGlow > * {
+  position: relative;
+  z-index: 1;
 }
 
-.btn-outline-danger:hover,
-.btn-outline-danger:focus {
-  background: #ef4444 !important;
-  color: #fff !important;
-  box-shadow:
-    0 0 24px #ef4444,
-    0 0 50px #f87171;
-  transform: scale(1.05);
+@keyframes rotateGlow {
+  to { transform: rotate(360deg); }
 }
 
-/* Green filled button intense glow */
-.btn-success {
-  background: linear-gradient(45deg, #22c55e, #bef264) !important;
-  border: none !important;
-  color: #0a0f1a !important;
-  box-shadow:
-    0 0 20px #22c55e,
-    0 0 48px #bef264;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.btn-success:hover,
-.btn-success:focus {
-  background: linear-gradient(45deg, #bef264, #22c55e) !important;
-  box-shadow:
-    0 0 28px #22c55e,
-    0 0 64px #bef264;
-  color: #0a0f1a !important;
-  transform: scale(1.1);
+.illustration {
+  max-width: 160px;
+  margin: 0 auto 1rem;
+  display: block;
+  filter: drop-shadow(0 0 10px rgba(0,255,136,0.5));
 }
 
-/* === Animations === */
+/* Animation fade-in */
+.fadeIn {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeSlideUp 1s ease forwards;
+}
 
-@keyframes flickerNeon {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+@keyframes fadeSlideUp {
+  to {
     opacity: 1;
-    text-shadow:
-      0 0 8px #22c55e,
-      0 0 20px #bef264,
-      0 0 30px #22c55e,
-      0 0 40px #bef264;
-  }
-  20%, 22%, 24%, 55% {
-    opacity: 0.8;
-    text-shadow: none;
+    transform: translateY(0);
   }
 }
 
-@keyframes glitchEffect {
-  0% {
-    clip: rect(0, 9999px, 0, 0);
-    transform: translate(0);
-  }
-  20% {
-    clip: rect(2px, 9999px, 6px, 0);
-    transform: translate(-2px, -2px);
-  }
-  40% {
-    clip: rect(12px, 9999px, 18px, 0);
-    transform: translate(2px, 2px);
-  }
-  60% {
-    clip: rect(5px, 9999px, 10px, 0);
-    transform: translate(-1px, 1px);
-  }
-  80% {
-    clip: rect(10px, 9999px, 15px, 0);
-    transform: translate(1px, -1px);
-  }
-  100% {
-    clip: rect(0, 9999px, 0, 0);
-    transform: translate(0);
-  }
+/* เพิ่ม hover effect ให้ฟีเจอร์เด้งขึ้น */
+.features li {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
-@keyframes glitchTop {
-  0%, 100% {
-    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-    transform: translate(0);
-    opacity: 1;
-  }
-  50% {
-    clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
-    transform: translate(-3px, 2px);
-    opacity: 0.8;
-  }
-}
-
-@keyframes glitchBottom {
-  0%, 100% {
-    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-    transform: translate(0);
-    opacity: 1;
-  }
-  50% {
-    clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
-    transform: translate(3px, -2px);
-    opacity: 0.8;
-  }
-}
-
-@keyframes pulseGlow {
-  0% {
-    box-shadow:
-      0 0 14px #bef264,
-      0 0 30px #a3e635,
-      0 0 50px #22c55e;
-  }
-  100% {
-    box-shadow:
-      0 0 24px #bef264,
-      0 0 40px #a3e635,
-      0 0 60px #22c55e;
-  }
-}
-
-/* Responsive tweaks */
-
-@media (max-width: 767px) {
-  .brandText {
-    font-size: 1.2rem;
-  }
-
-  .brandBadge {
-    display: none;
-  }
-
-  .nav-link {
-    font-size: 1rem;
-    padding: 0.4rem 0.6rem;
-  }
+.features li:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 0 15px rgba(0,255,136,0.5);
 }
