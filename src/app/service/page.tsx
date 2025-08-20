@@ -17,7 +17,7 @@ import {
 import 'chartjs-adapter-date-fns'
 import { CandlestickController, CandlestickElement } from 'chartjs-chart-financial'
 import { Chart } from 'react-chartjs-2'
-import './Service.css'
+import './service.css'
 
 ChartJS.register(
   CategoryScale,
