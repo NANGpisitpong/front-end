@@ -15,11 +15,10 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #000000;
-    --foreground: #ededed;
-  }
+/* Force dark theme globally by removing auto OS-based switching */
+:root {
+  --background: #000000;
+  --foreground: #ededed;
 }
 
 body {

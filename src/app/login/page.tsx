@@ -1,22 +1,24 @@
 "use client";
 import React, {
   useState,
-  useMemo,
   useCallback,
   FormEvent,
   useEffect,
   useRef,
 } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import "./login.css";
-
 
 const NUM_PARTICLES = 48;
 const validateEmail = (email: string) => /^\S+@\S+\.\S+$/.test(email);
 
-
 export default function Login() {
+  const router = useRouter();
+
+  // form state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -24,20 +26,35 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // preload saved email if present
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("savedEmail");
+      if (saved) {
+        setEmail(saved);
+        setRemember(true);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
   const particlesRef = useRef<HTMLDivElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   // particles positions (generate only on client to avoid hydration mismatch)
-  const [particles, setParticles] = useState<Array<{
-    id: number;
-    top: number;
-    left: number;
-    size: number;
-    delay: number;
-    dur: number;
-    hueShift: number;
-    opacity: number;
-  }>>([]);
+  const [particles, setParticles] = useState<
+    Array<{
+      id: number;
+      top: number;
+      left: number;
+      size: number;
+      delay: number;
+      dur: number;
+      hueShift: number;
+      opacity: number;
+    }>
+  >([]);
 
   useEffect(() => {
     const arr = Array.from({ length: NUM_PARTICLES }).map((_, idx) => {
@@ -76,10 +93,10 @@ export default function Login() {
       el.style.transform = "";
     }
     window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseleave", onLeave);
+    window.addEventListener("mouseleave", onLeave as any);
     return () => {
       window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseleave", onLeave);
+      window.removeEventListener("mouseleave", onLeave as any);
     };
   }, []);
 
@@ -96,11 +113,12 @@ export default function Login() {
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
-  // submit
+  // submit with real backend auth
   const handleSubmit = useCallback(
-    (e: FormEvent) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setError("");
+
       if (!validateEmail(email)) {
         setError("❌ อีเมลไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง");
         return;
@@ -109,21 +127,69 @@ export default function Login() {
         setError("❌ กรุณาใส่รหัสผ่าน");
         return;
       }
+
       setLoading(true);
-      setTimeout(() => {
-        if (email !== "test@example.com" || password !== "123456") {
-          setLoading(false);
-          setError("❌ ไม่พบบัญชีหรือรหัสผ่านไม่ถูกต้อง");
-          return;
+      try {
+        const res = await fetch(
+          "https://backend-nextjs-virid.vercel.app/api/auth/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            // API expects { username, password } — we pass the email as username
+            body: JSON.stringify({ username: email, password }),
+          }
+        );
+
+        // attempt to parse the body even on non-2xx
+        let data: any = {};
+        try {
+          data = await res.json();
+        } catch {
+          // non-JSON response
         }
-        if (remember) localStorage.setItem("savedEmail", email);
-        else localStorage.removeItem("savedEmail");
+
+        if (res.ok && data?.token) {
+          // persist token
+          localStorage.setItem("token", data.token);
+
+          // remember email if requested
+          if (remember) localStorage.setItem("savedEmail", email);
+          else localStorage.removeItem("savedEmail");
+
+          setLoading(false);
+          await Swal.fire({
+            icon: "success",
+            title: "<h3>Login Successfully!</h3>",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+
+          // navigate to admin/users
+          router.push("/admin/user");
+        } else {
+          const message =
+            data?.message ||
+            (res.status === 401
+              ? "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"
+              : "ไม่สามารถเข้าสู่ระบบได้ในขณะนี้");
+          throw new Error(message);
+        }
+      } catch (err: any) {
+        console.error("Login error:", err);
         setLoading(false);
-        setError("");
-        alert(`ยินดีต้อนรับ ${email}`);
-      }, 1200);
+        setError(`❌ ${err?.message || "Login Failed"}`);
+        await Swal.fire({
+          icon: "warning",
+          title: "<h3>Login Failed!</h3>",
+          text: err?.message,
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
     },
-    [email, password, remember]
+    [email, password, remember, router]
   );
 
   return (
@@ -131,11 +197,29 @@ export default function Login() {
       {/* layered background */}
       <div className="bg-layer animated-gradient" aria-hidden />
       <div className="bg-layer bg-grid" aria-hidden>
-        <svg className="stock-graph" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden>
+        <svg
+          className="stock-graph"
+          viewBox="0 0 1200 300"
+          preserveAspectRatio="none"
+          aria-hidden
+        >
           {[...Array(6)].map((_, i) => {
             const yBase = 220 - i * 18;
-            const d = `M0 ${yBase} C 150 ${yBase - (40 + i * 8)}, 300 ${yBase + (20 + i * 6)}, 450 ${yBase - (30 + i * 10)} C 600 ${yBase + 40}, 750 ${yBase - 60}, 900 ${yBase - 10} C1050 ${yBase - 40}, 1200 ${yBase - 20}, 1200 ${yBase - 20}`;
-            return <path key={i} className={`stock-path line${i + 1}`} d={d} style={{ animationDelay: `${i * 0.8}s` }} />;
+            const d = `M0 ${yBase} C 150 ${yBase - (40 + i * 8)}, 300 ${
+              yBase + (20 + i * 6)
+            }, 450 ${yBase - (30 + i * 10)} C 600 ${
+              yBase + 40
+            }, 750 ${yBase - 60}, 900 ${yBase - 10} C1050 ${
+              yBase - 40
+            }, 1200 ${yBase - 20}, 1200 ${yBase - 20}`;
+            return (
+              <path
+                key={i}
+                className={`stock-path line${i + 1}`}
+                d={d}
+                style={{ animationDelay: `${i * 0.8}s` }}
+              />
+            );
           })}
         </svg>
       </div>
@@ -154,7 +238,9 @@ export default function Login() {
               animationDelay: `${p.delay}ms`,
               animationDuration: `${p.dur}ms`,
               opacity: p.opacity,
-              filter: `hue-rotate(${p.hueShift}deg) blur(${p.size > 8 ? 1.6 : 0.4}px)`,
+              filter: `hue-rotate(${p.hueShift}deg) blur(${
+                p.size > 8 ? 1.6 : 0.4
+              }px)`,
             }}
           />
         ))}
@@ -165,23 +251,37 @@ export default function Login() {
         className="back-btn"
         aria-label="กลับหน้า Home"
         style={{
-          position: 'fixed', top: 16, left: 16, zIndex: 9999,
-          display: 'inline-flex', alignItems: 'center', gap: '8px',
-          padding: '10px 14px', borderRadius: 12,
-          border: '1.5px solid #4ad8ff', color: '#e7f0ff', textDecoration: 'none',
-          background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(8px)',
-          boxShadow: '0 0 12px rgba(74,216,255,.4), inset 0 0 18px rgba(74,216,255,.12)',
-          fontWeight: 800
+          position: "fixed",
+          top: 16,
+          left: 16,
+          zIndex: 9999,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "8px",
+          padding: "10px 14px",
+          borderRadius: 12,
+          border: "1.5px solid #4ad8ff",
+          color: "#e7f0ff",
+          textDecoration: "none",
+          background: "rgba(255,255,255,0.06)",
+          backdropFilter: "blur(8px)",
+          boxShadow:
+            "0 0 12px rgba(74,216,255,.4), inset 0 0 18px rgba(74,216,255,.12)",
+          fontWeight: 800,
         }}
       >
-        <span className="back-arrow" style={{ fontSize: '1.2rem', lineHeight: 1 }}>◀</span>
+        <span className="back-arrow" style={{ fontSize: "1.2rem", lineHeight: 1 }}>
+          ◀
+        </span>
         กลับหน้า Home
       </Link>
       <main className="login-page">
         <div className="login-card" ref={cardRef} role="region" aria-label="Login">
           <section className="panel form-panel">
             <div className="brand">
-              <div className="logo"><img src="/images/GreenPip-logo.png"/></div>
+              <div className="logo">
+                <img src="/images/GreenPip-logo.png" />
+              </div>
               <div className="brand-text">
                 <div className="brand-title">Let's go right now🚀</div>
                 <div className="brand-sub">Sign in to your dashboard</div>
@@ -193,7 +293,9 @@ export default function Login() {
             <form className="panel-form" onSubmit={handleSubmit} noValidate>
               {error && <div className="alert">{error}</div>}
 
-              <label className="form-label" htmlFor="email">Account🤵</label>
+              <label className="form-label" htmlFor="email">
+                Account🤵
+              </label>
               <input
                 id="email"
                 className="form-input"
@@ -204,7 +306,9 @@ export default function Login() {
                 aria-describedby="emailHelp"
               />
 
-              <label className="form-label" htmlFor="password">Password🔐</label>
+              <label className="form-label" htmlFor="password">
+                Password🔐
+              </label>
               <div className="password-field">
                 <input
                   id="password"
@@ -226,32 +330,61 @@ export default function Login() {
 
               <div className="row between small">
                 <label className="remember">
-                  <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} /> Remember 30 days
+                  <input
+                    type="checkbox"
+                    checked={remember}
+                    onChange={(e) => setRemember(e.target.checked)}
+                  />{" "}
+                  Remember 30 days
                 </label>
-                <Link href="/forgot-password" className="link muted">Forgot?</Link>
+                <Link href="/forgot-password" className="link muted">
+                  Forgot?
+                </Link>
               </div>
 
-              <button className="btn primary" type="submit" disabled={loading} aria-busy={loading}>
-                <span className="btn-text">{loading ? "Loading..." : "Sign in"}</span>
+              <button
+                className="btn primary"
+                type="submit"
+                disabled={loading}
+                aria-busy={loading}
+              >
+                <span className="btn-text">
+                  {loading ? "Loading..." : "Sign in"}
+                </span>
                 <span className="btn-emoji">➡️</span>
               </button>
 
-              <button type="button" className="btn ghost btn-google" onClick={() => alert("Google placeholder")}>
+              <button
+                type="button"
+                className="btn ghost btn-google"
+                onClick={() => alert("Google placeholder")}
+              >
                 <FaGoogle /> <span>Sign in with Google</span>
               </button>
             </form>
 
             <p className="signup">
-              Don’t have an account? <Link href="/register" className="link">Sign up</Link>
+              Don’t have an account?{" "}
+              <Link href="/register" className="link">
+                Sign up
+              </Link>
             </p>
           </section>
 
           <aside className="panel visual-panel" aria-hidden>
             <div className="visual-overlay">
-              <img src="/images/Patterns.jpg" alt="Visual pattern" className="visual-image" draggable={false} />
+              <img
+                src="/images/Patterns.jpg"
+                alt="Visual pattern"
+                className="visual-image"
+                draggable={false}
+              />
               <div className="visual-caption">
                 <h3>Real-time insights</h3>
-                <p>Realtime charts, subtle motion, and micro interactions — built for pros.</p>
+                <p>
+                  Realtime charts, subtle motion, and micro interactions — built
+                  for pros.
+                </p>
               </div>
             </div>
           </aside>

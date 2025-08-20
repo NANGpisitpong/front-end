@@ -172,24 +172,28 @@ export default function WelcomePage() {
 
   const floatingRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!floatingRef.current) return;
+    const el = floatingRef.current;
+    if (!el) return;
 
-    let frameId: number;
+    let frameId: number | null = null;
     let t = 0;
+    let alive = true;
 
     const animate = () => {
+      if (!alive) return;
       t += 0.025;
       const floatY = Math.sin(t) * 10;
       const rotateX = Math.sin(t * 0.7) * 7;
       const rotateZ = Math.sin(t * 1.3) * 5;
-      floatingRef.current!.style.transform = `translateY(${floatY}px) rotateX(${rotateX}deg) rotateZ(${rotateZ}deg)`;
+      el.style.transform = `translateY(${floatY}px) rotateX(${rotateX}deg) rotateZ(${rotateZ}deg)`;
       frameId = requestAnimationFrame(animate);
     };
 
     animate();
 
     return () => {
-      cancelAnimationFrame(frameId);
+      alive = false;
+      if (frameId) cancelAnimationFrame(frameId);
     };
   }, [showWelcome]);
 

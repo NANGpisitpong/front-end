@@ -476,6 +476,23 @@ export default function HomeFuturistic() {
         </div>
       </section>
 
+      <section className="carousel-section" aria-label="Mega Market Highlights">
+        <div className="carousel-container">
+          <div className="carousel-track">
+            {[
+              '/images/slide1.jpg',
+              '/images/slide2.png',
+              '/images/slide3.png',
+              '/images/slide4.jpg',
+            ].map((src, idx) => (
+              <div className="carousel-slide" key={idx}>
+                <img src={src} alt={`Market visual ${idx + 1}`} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CORE CAPABILITIES */}
       <section className="features container" aria-label="Core capabilities">
         <div className="holo-card">

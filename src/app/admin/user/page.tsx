@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import './user.css';
 import Swal from 'sweetalert2';
+import { useRouter } from 'next/navigation';
 
 // Data model from backend
 type UserItem = {
@@ -56,24 +57,39 @@ function formatDate(iso?: string): string {
 export default function Page() {
   const [items, setItems] = useState<UserItem[]>([]);
   const [deletingId, setDeletingId] = useState<string | number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     let isMounted = true;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!token) {
+      router.push('/login');
+      return;
+    }
     async function getUsers() {
       try {
-        const res = await fetch('http://itdev.cmtc.ac.th:3000/api/users');
-        if (!res.ok) return console.error('Failed to fetch data');
+        const res = await fetch('https://backend-nextjs-virid.vercel.app/api/users');
+        if (!res.ok) {
+          console.error('Failed to fetch data');
+          if (isMounted) setLoading(false);
+          return;
+        }
         const data: UserItem[] = await res.json();
-        if (isMounted) setItems(Array.isArray(data) ? data : []);
+        if (isMounted) {
+          setItems(Array.isArray(data) ? data : []);
+          setLoading(false);
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
+        if (isMounted) setLoading(false);
       }
     }
 
     getUsers();
     const interval = setInterval(getUsers, 3000);
     return () => { isMounted = false; clearInterval(interval); };
-  }, []);
+  }, [router]);
 
   // Enrich each row to match register semantics
   const enriched = useMemo(() => {
@@ -103,7 +119,7 @@ export default function Page() {
 
     try {
       setDeletingId(u.id);
-      const res = await fetch('http://itdev.cmtc.ac.th:3000/api/users', {
+      const res = await fetch('https://backend-nextjs-virid.vercel.app/api/users', {
         method: 'DELETE',
         headers: {
           Accept: 'application/json',
@@ -124,6 +140,10 @@ export default function Page() {
       setDeletingId(null);
     }
   };
+
+  if (loading) {
+    return <div className="text-center"><h1>Loading...</h1></div>;
+  }
 
   return (
     <div className="user-wrapper">

@@ -1,168 +1,322 @@
-/* ===== Navigation.module.css ===== */
+/* === โหดมาก Neon Glitch + Flicker + Pulse === */
 
-/* ทำให้แถบ nav เป็น glass + glow */
 .navGlass {
-  backdrop-filter: blur(20px) saturate(180%);
-  background: rgba(10, 15, 25, 0.7);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  box-shadow: inset 0 0 20px rgba(0,255,140,0.15), 0 0 25px rgba(0,255,140,0.25);
+  background: rgba(10, 15, 26, 0.85);
+  backdrop-filter: saturate(200%) blur(16px);
+  box-shadow:
+    0 0 30px #22c55e,
+    0 0 60px #84cc16,
+    inset 0 0 40px #22c55e,
+    inset 0 0 80px #bef264;
+  border-bottom: 2px solid #22c55e;
   position: relative;
-  overflow: hidden;
-}
-.navGlass::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(from 180deg at 50% 50%, rgba(0,255,140,0.2), rgba(255,255,0,0.15), rgba(0,255,140,0.2));
-  animation: rotateSlow 12s linear infinite;
-  z-index: 0;
-}
-@keyframes rotateSlow {
-  to { transform: rotate(360deg); }
+  z-index: 1100;
+  transition: background-color 0.3s ease;
 }
 
-/* แบรนด์ Green Pip แบบเรืองแสง */
+/* Brand style with flicker + glitch */
+
 .brandText {
-  font-size: 1.6rem;
   font-weight: 900;
-  letter-spacing: .5px;
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
+  font-size: 1.6rem;
+  letter-spacing: 0.15em;
+  color: #a3e635;
   position: relative;
-  z-index: 1;
+  user-select: none;
+  text-transform: uppercase;
+  animation: flickerNeon 2s infinite;
+  filter: drop-shadow(0 0 8px #22c55e);
 }
+
 .brandGreen {
-  background: linear-gradient(90deg,#22c55e,#16a34a,#22c55e);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: flowGreen 5s linear infinite;
-  text-shadow: 0 0 6px rgba(34,197,94,0.7), 0 0 20px rgba(34,197,94,0.5);
+  color: #22c55e;
+  text-shadow:
+    0 0 6px #22c55e,
+    0 0 12px #84cc16;
+  animation: glitchTop 3s infinite linear alternate;
 }
+
 .brandPip {
-  background: linear-gradient(90deg,#facc15,#eab308,#facc15);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: flowYellow 5s linear infinite reverse;
-  text-shadow: 0 0 6px rgba(250,204,21,0.7), 0 0 20px rgba(250,204,21,0.5);
-}
-@keyframes flowGreen {
-  to { background-position: 200% center; }
-}
-@keyframes flowYellow {
-  to { background-position: -200% center; }
+  color: #bef264;
+  text-shadow:
+    0 0 8px #bef264,
+    0 0 14px #a3e635;
+  animation: glitchBottom 3s infinite linear alternate;
 }
 
-/* Badge Beta */
 .brandBadge {
-  font-size: .7rem;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(90deg,#22c55e,#facc15);
-  padding: 2px 6px;
-  border-radius: 8px;
-  box-shadow: 0 0 6px rgba(34,197,94,0.6), 0 0 6px rgba(250,204,21,0.5);
+  font-size: 0.7rem;
+  font-weight: 900;
+  background: linear-gradient(45deg, #bef264, #22c55e);
+  color: #0a0f1a;
+  padding: 3px 12px;
+  border-radius: 20px;
+  box-shadow: 0 0 16px #22c55e;
+  margin-left: 10px;
+  user-select: none;
+  animation: pulseGlow 3s infinite;
 }
 
-/* Link Navigation + active effect */
-.navLink {
+/* Nav Link base - glitch + neon flicker */
+
+.nav-link {
+  color: #c8f2c8;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
   position: relative;
-  z-index: 1;
-  color: #eaf7f2 !important;
-  text-shadow: 0 0 3px rgba(0,255,140,0.25), 0 0 8px rgba(64,152,240,0.15);
-  transition: color .3s ease, text-shadow .3s ease;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.3s ease;
+  text-shadow:
+    0 0 8px #22c55e,
+    0 0 14px #84cc16,
+    0 0 20px #bef264;
+  animation: flickerNeon 2.5s infinite alternate;
 }
-.navLink:hover {
-  color: #0f0 !important;
-  text-shadow: 0 0 6px rgba(0,255,140,0.85),0 0 14px rgba(0,255,140,0.5);
+
+.nav-link::before,
+.nav-link::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  right: 0;
+  opacity: 0.8;
+  clip: rect(0, 0, 0, 0);
+  text-shadow: -2px 0 #22c55e, 2px 0 #bef264;
+  animation: glitchEffect 2s infinite;
 }
-.navLink:focus-visible {
-  outline: 2px solid #4098f0;
-  outline-offset: 2px;
-  text-shadow: 0 0 6px rgba(64,152,240,0.8), 0 0 16px rgba(0,255,140,0.5);
+
+.nav-link::before {
+  animation-delay: -0.2s;
+  clip: rect(2px, 9999px, 6px, 0);
 }
+
+.nav-link::after {
+  animation-delay: -0.4s;
+  clip: rect(10px, 9999px, 14px, 0);
+}
+
+/* Active link stronger glow + pulse */
 .navLinkActive {
-  color: #facc15 !important;
-  text-shadow: 0 0 5px rgba(250,204,21,0.7),0 0 10px rgba(250,204,21,0.4);
-}
-.navLinkActive::after {
-  content: "";
-  position: absolute;
-  left: 20%;
-  bottom: 0;
-  width: 60%;
-  height: 3px;
-  background: linear-gradient(90deg,#22c55e,#facc15);
-  box-shadow: 0 0 10px rgba(250,204,21,0.85), 0 0 14px rgba(34,197,94,0.4);
+  color: #bef264;
+  text-shadow:
+    0 0 14px #bef264,
+    0 0 30px #a3e635,
+    0 0 50px #22c55e;
+  animation: pulseGlow 3s infinite alternate;
+  font-weight: 900;
 }
 
-/* Dropdown menu futuristic style */
-.dropdownMenu {
-  background: rgba(10,15,25,0.9);
-  border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-}
-.dropdownItem {
-  color: #eaf7f2 !important;
-  text-shadow: 0 0 3px rgba(0,255,140,0.25), 0 0 6px rgba(64,152,240,0.15);
+/* Dropdown menu with neon border and glow */
+.dropdown-menu {
+  background: rgba(10, 15, 26, 0.95);
+  backdrop-filter: saturate(220%) blur(18px);
+  border-radius: 16px;
+  border: 2px solid #22c55e;
+  box-shadow:
+    0 0 20px #22c55e,
+    0 0 40px #bef264,
+    inset 0 0 50px #22c55e;
+  min-width: 14rem;
+  padding: 0.6rem 0;
   font-weight: 700;
-  transition: background .3s ease, color .3s ease, text-shadow .3s ease;
-}
-.dropdownItem:hover {
-  background: linear-gradient(135deg, rgba(0,255,140,0.25), rgba(64,152,240,0.25));
-  color: #ffffff !important;
-  text-shadow: 0 0 6px rgba(0,255,140,0.85), 0 0 10px rgba(64,152,240,0.6);
+  letter-spacing: 0.1em;
+  user-select: none;
+  z-index: 1200;
 }
 
-/* ปุ่มเรืองแสง */
+/* Dropdown items with neon hover */
+.dropdown-item {
+  color: #c8f2c8;
+  padding: 0.6rem 1.8rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  user-select: none;
+  text-shadow:
+    0 0 6px #22c55e;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: #22c55e;
+  color: #0a0f1a;
+  text-shadow:
+    0 0 12px #bef264,
+    0 0 24px #22c55e,
+    0 0 40px #bef264;
+  outline: none;
+  transform: scale(1.05);
+}
+
+/* Buttons neon style */
 .btnGlow {
-  position: relative;
-  overflow: hidden;
-}
-.btnGlow::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle,rgba(0,255,140,0.3) 0%,transparent 70%);
-  animation: pulse 3s ease-in-out infinite;
-  z-index: 0;
-}
-@keyframes pulse {
-  0%,100% { transform: scale(0.8); opacity: .5; }
-  50% { transform: scale(1.1); opacity: 1; }
+  border-radius: 12px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.1em;
+  box-shadow:
+    0 0 12px #22c55e,
+    0 0 32px #bef264,
+    inset 0 0 24px #22c55e;
+  transition: all 0.3s ease;
+  user-select: none;
+  text-transform: uppercase;
 }
 
-/* Divider (mobile) */
-.mobileDivider {
-  height: 1px;
-  background: linear-gradient(90deg,transparent,#22c55e,#facc15,transparent);
-  box-shadow: 0 0 6px rgba(34,197,94,0.5);
+.btn-outline-success {
+  border-color: #22c55e !important;
+  color: #bef264 !important;
+  background: transparent !important;
 }
 
-/* Running graph-like lines background overlay */
-.navGlass::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  pointer-events: none;
-  z-index: 0;
-  opacity: .25;
-  background:
-    repeating-linear-gradient(135deg, rgba(34,197,94,.18) 0 2px, transparent 2px 26px),
-    repeating-linear-gradient(-135deg, rgba(250,204,21,.14) 0 2px, transparent 2px 26px);
-  animation: graphRun 16s linear infinite;
+.btn-outline-success:hover,
+.btn-outline-success:focus {
+  background: #22c55e !important;
+  color: #0a0f1a !important;
+  box-shadow:
+    0 0 22px #22c55e,
+    0 0 48px #bef264,
+    inset 0 0 36px #22c55e;
+  transform: scale(1.1);
 }
 
-@keyframes graphRun {
-  0% { background-position: 0 0, 0 0; }
-  50% { background-position: 240px 0, 0 240px; }
-  100% { background-position: 0 0, 0 0; }
+.btn-outline-danger {
+  border-color: #ef4444 !important;
+  color: #f87171 !important;
+  background: transparent !important;
+  box-shadow:
+    0 0 10px #ef4444;
+}
+
+.btn-outline-danger:hover,
+.btn-outline-danger:focus {
+  background: #ef4444 !important;
+  color: #fff !important;
+  box-shadow:
+    0 0 24px #ef4444,
+    0 0 50px #f87171;
+  transform: scale(1.05);
+}
+
+/* Green filled button intense glow */
+.btn-success {
+  background: linear-gradient(45deg, #22c55e, #bef264) !important;
+  border: none !important;
+  color: #0a0f1a !important;
+  box-shadow:
+    0 0 20px #22c55e,
+    0 0 48px #bef264;
+}
+
+.btn-success:hover,
+.btn-success:focus {
+  background: linear-gradient(45deg, #bef264, #22c55e) !important;
+  box-shadow:
+    0 0 28px #22c55e,
+    0 0 64px #bef264;
+  color: #0a0f1a !important;
+  transform: scale(1.1);
+}
+
+/* === Animations === */
+
+@keyframes flickerNeon {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+    text-shadow:
+      0 0 8px #22c55e,
+      0 0 20px #bef264,
+      0 0 30px #22c55e,
+      0 0 40px #bef264;
+  }
+  20%, 22%, 24%, 55% {
+    opacity: 0.8;
+    text-shadow: none;
+  }
+}
+
+@keyframes glitchEffect {
+  0% {
+    clip: rect(0, 9999px, 0, 0);
+    transform: translate(0);
+  }
+  20% {
+    clip: rect(2px, 9999px, 6px, 0);
+    transform: translate(-2px, -2px);
+  }
+  40% {
+    clip: rect(12px, 9999px, 18px, 0);
+    transform: translate(2px, 2px);
+  }
+  60% {
+    clip: rect(5px, 9999px, 10px, 0);
+    transform: translate(-1px, 1px);
+  }
+  80% {
+    clip: rect(10px, 9999px, 15px, 0);
+    transform: translate(1px, -1px);
+  }
+  100% {
+    clip: rect(0, 9999px, 0, 0);
+    transform: translate(0);
+  }
+}
+
+@keyframes glitchTop {
+  0%, 100% {
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(0);
+    opacity: 1;
+  }
+  50% {
+    clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+    transform: translate(-3px, 2px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes glitchBottom {
+  0%, 100% {
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    transform: translate(0);
+    opacity: 1;
+  }
+  50% {
+    clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+    transform: translate(3px, -2px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow:
+      0 0 14px #bef264,
+      0 0 30px #a3e635,
+      0 0 50px #22c55e;
+  }
+  100% {
+    box-shadow:
+      0 0 24px #bef264,
+      0 0 40px #a3e635,
+      0 0 60px #22c55e;
+  }
+}
+
+/* Responsive tweaks */
+
+@media (max-width: 767px) {
+  .brandText {
+    font-size: 1.2rem;
+  }
+
+  .brandBadge {
+    display: none;
+  }
+
+  .nav-link {
+    font-size: 1rem;
+    padding: 0.4rem 0.6rem;
+  }
 }

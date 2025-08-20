@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="th" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="th" data-theme="dark" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className={prompt.className}>
         <LayoutWrapper>{children}</LayoutWrapper> {/* ✅ Client wrapper */}
       </body>

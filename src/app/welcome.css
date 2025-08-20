@@ -1,6 +1,6 @@
 /* Basic resets */
 body, html, #__next {
-  margin: 0; padding: 0; height: 100%; width: 100%; background: black; overflow: hidden;
+  margin: 0; padding: 0; height: 100%; width: 100%; background: black; overflow-x: hidden;
 }
 
 .welcome-container {

@@ -1,55 +1,36 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Navigation from './Navigation';
 import Footer from './Footer';
 import LoadingOverlay from './LoadingOverlay'; // 
-import './LayoutWrapper.css'; 
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const hideLayout = pathname === '/login' || pathname === '/register';
 
   const [isLoading, setIsLoading] = useState(false);
-  const [exitNode, setExitNode] = useState<React.ReactNode | null>(null);
-  const lastChildrenRef = useRef<React.ReactNode>(children);
+  const [currentPath, setCurrentPath] = useState(pathname);
 
-  // keep reference of last rendered children for exit animation snapshot
-  useEffect(() => {
-    lastChildrenRef.current = children;
-  }, [children]);
-
-  // Smooth route change effect (stacked exit/enter + overlay)
-  useEffect(() => {
-    // mount snapshot of previous content in exit layer
-    setExitNode(lastChildrenRef.current);
-    // show overlay for a short moment
+useEffect(() => {
+  if (pathname !== currentPath) {
     setIsLoading(true);
-
     const timer = setTimeout(() => {
-      setExitNode(null); // remove exit layer after animation
-      setIsLoading(false); // hide overlay
-    }, 480); // keep in sync with CSS durations (~0.42s)
-
+      window.location.reload();
+    }, 400); // ปรับเวลาตามความต้องการ (400ms)
     return () => clearTimeout(timer);
-  }, [pathname]);
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [pathname]);
   return (
     <>
       {isLoading && <LoadingOverlay />}
-      <div className={["route-overlay", isLoading ? 'visible' : ''].join(' ')} aria-hidden="true" />
       {!hideLayout && <Navigation />}
-      <div className="route-stack">
-        {exitNode && (
-          <div className="route-layer route-exit">
-            {exitNode}
-          </div>
-        )}
-        <div className="route-layer route-enter">
-          {children}
-        </div>
+      <div style={{ opacity: isLoading ? 0.3 : 1, transition: 'opacity 0.3s' }}>
+        {children}
       </div>
-      {!hideLayout && !pathname.startsWith('/admin/user/edit') && <Footer />}
+      {!hideLayout && <Footer />}
     </>
   );
 }
