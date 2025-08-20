@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import './About.css';
-import { animateCounters, initParticles } from './About.js';
+import './about.css';
+import { animateCounters, initParticles } from './about.js';
 
 export default function About() {
   useEffect(() => {
