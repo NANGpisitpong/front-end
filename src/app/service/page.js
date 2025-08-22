@@ -1,5 +1,6 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import { FaChartLine, FaArrowUp, FaBitcoin, FaEthereum, FaApple, FaGoogle, FaMoneyBillWave } from 'react-icons/fa'
 import {
@@ -32,7 +33,7 @@ ChartJS.register(
   Legend,
   TimeScale
 )
-
+const Chart = dynamic(() => import('react-chartjs-2').then(mod => mod.Chart), { ssr: false })
 // Plan data
 const plans = [
   { 
