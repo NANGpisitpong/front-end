@@ -528,7 +528,7 @@ export default function HomeFuturistic() {
           <div className="holo-content">
             <h3>Wave Monitor</h3>
             <canvas id="sys-wave" className="canvas-visual cv-wave" style={{ width: '100%', display: 'block', pointerEvents: 'none' }} />
-            <p>สัญญาณคลื่นหลายความถี่จำลอง สะท้อนสภาว��ความผันผวนแบบเรียลไทม์</p>
+            <p>สัญญาณคลื่นหลายความถี่จำลอง สะท้อนสภาวะความผันผวนแบบเรียลไทม์</p>
           </div>
         </div>
         <div className="holo-card">

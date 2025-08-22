@@ -34,7 +34,6 @@ interface Plan {
   features: string[]
   description: string
   topDescription: string
-  image: string
 }
 
 const plans: Plan[] = [
@@ -44,7 +43,6 @@ const plans: Plan[] = [
     features: ['Access to charts','Community support','Basic indicators'],
     description:'เหมาะสำหรับมือใหม่ เริ่มต้นเรียนรู้และเทรดแบบเบื้องต้น',
     topDescription:'เริ่มต้นเรียนรู้และทดลองเทรดอย่างปลอดภัย',
-    image:'/images/bg3.png'
   },
   {
     name: 'Pro',
@@ -52,7 +50,6 @@ const plans: Plan[] = [
     features: ['All Basic features','Advanced indicators','Trading signals'],
     description:'สำหรับผู้เทรดที่มีประสบการณ์ ต้องการสัญญาณและวิเคราะห์เชิงลึก',
     topDescription:'สำหรับผู้ที่ต้องการวิเคราะห์ตลาดและสัญญาณเทรดแบบมืออาชีพ',
-    image:'/images/bg3.png'
   },
   {
     name: 'Ultimate',
@@ -60,7 +57,6 @@ const plans: Plan[] = [
     features: ['All Pro features','1-on-1 mentoring','Exclusive webinars'],
     description:'ครบเครื่องสำหรับมืออาชีพ รับคำปรึกษาและการอบรมเฉพาะตัว',
     topDescription:'แพ็กเกจเต็มรูปแบบ สำหรับมืออาชีพที่ต้องการ mentorship และ exclusive content',
-    image:'/images/bg3.png'
   },
 ]
 
@@ -141,46 +137,50 @@ const mutateTickerValue = (item: {text:string,color:string}) => {
 // ===== Components =====
 function Ticker({ data }: { data: {text:string,color:string}[] }) {
   return (
-    <div className="absolute inset-0 opacity-20">
-      <div className="whitespace-nowrap animate-marquee text-lg font-semibold">
-        {data.map((cell, idx) => (
-          <span key={idx} className="mx-6" style={{color: cell.color}}>
-            {cell.text}
-          </span>
-        ))}
+    <div className="ticker-background">
+      <div className="ticker-marquee">
+        {data.map((cell, idx)=>(<span key={idx} style={{color: cell.color}}>{cell.text}</span>))}
+      </div>
+      <div className="ticker-marquee2">
+        {data.map((cell, idx)=>(<span key={idx} style={{color: cell.color}}>{cell.text}</span>))}
       </div>
     </div>
   )
 }
 
 function PlanCard({ plan, selected, onSelect }: { plan: Plan, selected: string, onSelect: (name:string)=>void }) {
+  const [ripple, setRipple] = useState(false)
+  const handleClick = () => {
+    setRipple(true)
+    onSelect(plan.name)
+    setTimeout(()=>setRipple(false),600)
+  }
   return (
-    <div 
-      className={`relative rounded-2xl p-6 bg-gray-900/60 backdrop-blur-xl shadow-lg border transition transform hover:scale-105 hover:shadow-green-500/40 ${selected===plan.name?'border-green-400':'border-gray-700'}`}
-      onClick={()=>onSelect(plan.name)}
-    >
-      {plan.name==='Pro' && <div className="absolute top-4 right-4 bg-green-500 text-black text-xs font-bold px-3 py-1 rounded-full">Most Popular</div>}
-      {plan.name==='Ultimate' && <div className="absolute top-4 right-4 bg-yellow-400 text-black text-xs font-bold px-3 py-1 rounded-full">Premium</div>}
+    <div className={`plan-card ${selected===plan.name ? 'selected' : ''}`} onClick={handleClick}>
+      {ripple && <span className="ripple show"></span>}
+      {/* ===== Layered glass/neon/animated backgrounds ===== */}
+      <div className="plan-card-bg-glass"></div>
+      <div className="plan-card-bg-neon"></div>
+      <div className="plan-card-bg-animated"></div>
 
-      <div className="text-center mb-4">
-        <div className="text-sm text-green-400">{plan.topDescription}</div>
-        <img src={plan.image} alt={plan.name} className="w-24 h-24 mx-auto my-4 rounded-full border border-green-400 shadow-md" />
-        <h3 className="text-2xl font-bold">{plan.name}</h3>
-        <p className="text-green-400 font-bold text-xl">{plan.price}</p>
+      {plan.name==='Pro' && <div className="plan-badge">Most Popular</div>}
+      {plan.name==='Ultimate' && <div className="plan-badge ultimate-badge">Premium</div>}
+
+      <div className="plan-description-top">{plan.topDescription}</div>
+      <h3 className="plan-name">{plan.name}</h3>
+      <p className="plan-price">{plan.price}</p>
+
+      {/* Chart prominently */}
+      <div className="plan-chart plan-chart-prominent">
+        <Chart data={candleDataMap[plan.name]} options={candleOptions} type='candlestick' height={220}/>
       </div>
 
-      <div className="bg-black/40 rounded-xl p-3 shadow-inner mb-4">
-        <Chart data={candleDataMap[plan.name]} options={candleOptions} type='candlestick' height={180}/>
-      </div>
-
-      <ul className="space-y-1 text-sm mb-3">
+      <ul className="plan-features">
         {plan.features.map((f,i)=><li key={i}>✔ {f}</li>)}
       </ul>
 
-      <div className="text-gray-300 text-sm mb-4">{plan.description}</div>
-      <button className="w-full py-2 bg-green-500 text-black font-bold rounded-lg shadow-lg hover:bg-green-400 transition">
-        สมัครแพ็กเกจ
-      </button>
+      <div className="plan-description">{plan.description}</div>
+      <button className="plan-btn">สมัครแพ็กเกจ</button>
     </div>
   )
 }
@@ -202,21 +202,19 @@ function ComparisonTable() {
     ['Trading Challenges & Rewards','❌','❌','✔️'],
   ]
   return (
-    <div className="overflow-x-auto mt-12">
-      <table className="w-full text-sm text-center border border-gray-700 rounded-xl overflow-hidden">
-        <thead className="bg-green-500 text-black font-bold">
+    <div className="comparison-table">
+      <table>
+        <thead>
           <tr>
-            <th className="p-2">Feature</th>
-            <th className="p-2">Basic</th>
-            <th className="p-2">Pro</th>
-            <th className="p-2">Ultimate</th>
+            <th>Feature</th>
+            <th>Basic</th>
+            <th>Pro</th>
+            <th>Ultimate</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row,i)=>(
-            <tr key={i} className={`${i%2===0?'bg-gray-800/50':'bg-gray-900/50'}`}>
-              {row.map((col,j)=><td key={j} className="p-2 border border-gray-700">{col}</td>)}
-            </tr>
+            <tr key={i}>{row.map((col,j)=><td key={j}>{col}</td>)}</tr>
           ))}
         </tbody>
       </table>
@@ -240,26 +238,22 @@ export default function Service() {
   }, [])
 
   return (
-    <section className="relative py-12 px-4 md:px-12 text-white bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden">
+    <section className="service-section">
       <Ticker data={gridData} />
-
-      <div className="flex items-center justify-center gap-4 mb-6">
-        <FaChartLine size={42} className="text-green-500 drop-shadow-[0_0_12px_#22c55e]" />
-        <h2 className="text-3xl font-bold tracking-wide">GreenPip Services</h2>
-        <FaMoneyBillWave size={38} className="text-yellow-500 drop-shadow-[0_0_12px_#f59e0b]" />
+      <div className="service-header">
+        <FaChartLine size={42} className="service-icon-green" />
+        <h2 className="service-title">GreenPip Services</h2>
+        <FaMoneyBillWave size={38} className="service-icon-yellow" />
       </div>
-
-      <p className="text-center text-lg font-semibold mb-10">
+      <p className="service-desc">
         เลือกแพ็กเกจที่เหมาะกับคุณและเริ่มเทรดอย่างมืออาชีพ
       </p>
-
-      <div className="grid md:grid-cols-3 gap-8 z-10 relative">
-        {plans.map(plan=>(
-          <PlanCard key={plan.name} plan={plan} selected={selected} onSelect={setSelected} />
-        ))}
+      <div className="plan-container">
+        {plans.map(plan=><PlanCard key={plan.name} plan={plan} selected={selected} onSelect={setSelected}/>)}
       </div>
-
-      <ComparisonTable />
+      <div className="comparison-table-wrapper">
+        <ComparisonTable />
+      </div>
     </section>
   )
 }
