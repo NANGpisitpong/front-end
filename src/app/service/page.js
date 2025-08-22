@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
-import { FaChartLine, FaArrowUp, FaArrowDown, FaBitcoin, FaEthereum, FaApple, FaGoogle, FaMoneyBillWave } from 'react-icons/fa'
+import { useState, useEffect } from 'react'
+import { FaChartLine, FaArrowUp, FaBitcoin, FaEthereum, FaApple, FaGoogle, FaMoneyBillWave } from 'react-icons/fa'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -33,16 +33,8 @@ ChartJS.register(
   TimeScale
 )
 
-interface Plan {
-  name: string
-  price: string
-  features: string[]
-  description: string
-  topDescription: string
-  image: string
-}
-
-const plans: Plan[] = [
+// Plan data
+const plans = [
   { 
     name: 'Basic', price: '$29/month', features: ['Access to charts','Community support','Basic indicators'], 
     description:'เหมาะสำหรับมือใหม่ เริ่มต้นเรียนรู้และเทรดแบบเบื้องต้น', 
@@ -64,7 +56,7 @@ const plans: Plan[] = [
 ]
 
 // -------- Chart Data Memoized --------
-const candleDataMap: Record<string, any> = {
+const candleDataMap = {
   Basic: {
     datasets: [{
       label: 'Basic Candlestick',
@@ -76,7 +68,7 @@ const candleDataMap: Record<string, any> = {
         { x: 'Fri', o: 155, h: 165, l: 150, c: 160 },
       ],
       borderColor: '#22c55e',
-      backgroundColor: (ctx: { raw: { o: number; c: number } }) => ctx.raw.o < ctx.raw.c ? 'rgba(34,197,94,0.3)' : 'rgba(248,113,113,0.3)',
+      backgroundColor: (ctx) => ctx.raw.o < ctx.raw.c ? 'rgba(34,197,94,0.3)' : 'rgba(248,113,113,0.3)',
     }]
   },
   Pro: {
@@ -90,7 +82,7 @@ const candleDataMap: Record<string, any> = {
         { x: 'Fri', o: 165, h: 175, l: 160, c: 170 },
       ],
       borderColor: '#22c55e',
-      backgroundColor: (ctx: { raw: { o: number; c: number } }) => ctx.raw.o < ctx.raw.c ? 'rgba(34,197,94,0.3)' : 'rgba(248,113,113,0.3)',
+      backgroundColor: (ctx) => ctx.raw.o < ctx.raw.c ? 'rgba(34,197,94,0.3)' : 'rgba(248,113,113,0.3)',
     }]
   },
   Ultimate: {
@@ -104,7 +96,7 @@ const candleDataMap: Record<string, any> = {
         { x: 'Fri', o: 175, h: 185, l: 170, c: 180 },
       ],
       borderColor: '#22c55e',
-      backgroundColor: (ctx: { raw: { o: number; c: number } }) => ctx.raw.o < ctx.raw.c ? 'rgba(34,197,94,0.3)' : 'rgba(248,113,113,0.3)',
+      backgroundColor: (ctx) => ctx.raw.o < ctx.raw.c ? 'rgba(34,197,94,0.3)' : 'rgba(248,113,113,0.3)',
     }]
   }
 }
@@ -115,12 +107,12 @@ const candleOptions = {
     legend: { display: false },
     tooltip: {
       callbacks: {
-        label: (ctx: any) => `O:${ctx.raw.o} H:${ctx.raw.h} L:${ctx.raw.l} C:${ctx.raw.c}`
+        label: (ctx) => `O:${ctx.raw.o} H:${ctx.raw.h} L:${ctx.raw.l} C:${ctx.raw.c}`
       }
     }
   },
   scales: { 
-    x: { type: "category" as const, grid: { color: 'rgba(255,255,255,0.1)' } },
+    x: { type: "category", grid: { color: 'rgba(255,255,255,0.1)' } },
     y: { grid: { color: 'rgba(255,255,255,0.1)' } }
   }
 }
@@ -135,12 +127,12 @@ const TICKER_LIST = [
   'FIL +1.50%', 'VET +0.90%', 'XTZ +1.20%', 'EOS +0.80%', 'ZEC +1.10%'
 ]
 
-const formatTicker = (text: string) => ({
+const formatTicker = (text) => ({
   text,
   color: text.includes('−') ? '#f87171' : '#22c55e'
 })
 
-const mutateTickerValue = (item: {text:string, color:string}) => {
+const mutateTickerValue = (item) => {
   const newText = item.text.replace(
     /([-+]?\d+\.\d+)%/,
     () => `${(Math.random() * 3 - 1.5).toFixed(2)}%`
@@ -210,7 +202,7 @@ export default function Service() {
                   labels: ['Mon','Tue','Wed','Thu','Fri'],
                   datasets: [{
                     label: 'Trend',
-                    data: candleDataMap[plan.name].datasets[0].data.map((d: any)=>d.c),
+                    data: candleDataMap[plan.name].datasets[0].data.map((d)=>d.c),
                     borderColor: '#22c55e',
                     backgroundColor: 'rgba(34,197,94,0.15)',
                     tension: 0.4,
