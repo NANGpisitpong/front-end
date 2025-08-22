@@ -17,7 +17,7 @@ import {
 } from 'chart.js'
 import 'chartjs-adapter-date-fns'
 import { CandlestickController, CandlestickElement } from 'chartjs-chart-financial'
-import { Chart } from 'react-chartjs-2'
+const Chart = dynamic(() => import('react-chartjs-2').then(mod => mod.Chart), { ssr: false })
 import './service.css'
 
 ChartJS.register(
@@ -33,7 +33,7 @@ ChartJS.register(
   Legend,
   TimeScale
 )
-const Chart = dynamic(() => import('react-chartjs-2').then(mod => mod.Chart), { ssr: false })
+// Removed duplicate Chart declaration
 // Plan data
 const plans = [
   { 
