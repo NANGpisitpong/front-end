@@ -1,516 +1,793 @@
-/* ===== Extra Layered & Animated Effects ===== */
-.plan-card-bg-animated {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  border-radius: 20px;
-  pointer-events: none;
-  z-index: 2;
-  background: linear-gradient(120deg, rgba(34,197,94,0.18) 0%, rgba(245,158,11,0.12) 100%);
-  opacity: 0.7;
-  animation: borderGlow 3s infinite alternate;
-}
-@keyframes borderGlow {
-  0% { box-shadow: 0 0 24px #22c55e44, 0 0 8px #facc1544; }
-  100% { box-shadow: 0 0 48px #22c55e99, 0 0 24px #facc1599; }
-}
-.plan-card.selected .plan-card-bg-animated {
-  animation: borderGlowPulse 1.2s infinite alternate;
-  opacity: 1;
-}
-@keyframes borderGlowPulse {
-  0% { box-shadow: 0 0 48px #22c55e99, 0 0 24px #facc1599; opacity: 1; }
-  100% { box-shadow: 0 0 80px #22c55e, 0 0 40px #facc15; opacity: 0.7; }
-}
-.plan-card {
-  /* Floating effect */
-  will-change: transform, box-shadow;
-}
-.plan-card:hover {
-  /* Extra floating */
-  transform: translateY(-12px) scale(1.08) rotate(-1deg);
-}
-.plan-card .plan-card-bg-glass {
-  /* Interactive glass overlay */
-  transition: opacity 0.4s;
-}
-.plan-card:hover .plan-card-bg-glass {
-  opacity: 0.5;
-}
-.ticker-background {
-  /* Gradient shine overlay */
+/* =========================================
+   General Section & Layout
+========================================= */
+.service-section-hot {
+  background: radial-gradient(circle at top, #0d0d0d 0%, #111 100%);
+  color: #e5e5e5;
+  padding: 3rem 1rem;
+  font-family: 'Segoe UI', sans-serif;
   position: relative;
-}
-.ticker-background::after {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; width: 100%; height: 100%;
-  pointer-events: none;
-  background: linear-gradient(90deg, transparent 0%, #22c55e44 50%, transparent 100%);
-  opacity: 0.3;
-  animation: tickerShine 4s linear infinite;
-}
-@keyframes tickerShine {
-  0% { background-position: -100% 0; }
-  100% { background-position: 100% 0; }
-}
-/* ===== Layered Effects for PlanCard ===== */
-.plan-card-bg-glass {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(120deg, rgba(34,197,94,0.08) 0%, rgba(15,20,35,0.7) 100%);
-  border-radius: 20px;
-  z-index: 0;
-  pointer-events: none;
-  filter: blur(6px);
-}
-.plan-card-bg-neon {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  border-radius: 20px;
-  box-shadow: 0 0 48px 8px #22c55e44, 0 0 24px 4px #facc1544;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.7;
-}
-.plan-card .plan-chart-prominent {
-  background: linear-gradient(120deg, #10151c 60%, #22c55e22 100%);
-  border-radius: 1.2rem;
-  box-shadow: 0 0 32px #22c55e44, 0 0 12px #facc1544;
-  padding: 1.2rem;
-  margin: 1.2rem 0;
-  position: relative;
-  z-index: 2;
-}
-/* ===== Root Variables ===== */
-:root {
-  --bg: #0a0f1f;
-  --panel: rgba(20, 25, 40, 0.8);
-  --text: #e5e5e5;
-  --muted: #94a3b8;
-  --primary: #22c55e;
-  --accent: #facc15;
-  --danger: #f87171;
-  --card-bg: rgba(15, 20, 35, 0.7);
-  --glass-blur: 12px;
-}
-
-/* ===== Global ===== */
-body {
-  font-family: 'Poppins', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  margin: 0;
-  padding: 0;
-}
-
-.service-section {
-  padding: 48px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(120deg, #10151c 0%, #1a2332 100%);
-  box-shadow: 0 0 80px 0 #22c55e33, 0 0 120px 0 #0f172a99;
-  position: relative;
-}
-.service-section::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(34,197,94,0.18) 0%, transparent 70%),
-    repeating-linear-gradient(135deg, #22c55e22 0 2px, transparent 2px 40px);
-  animation: pulseGlow 8s infinite alternate;
-  z-index: 0;
-  filter: blur(12px);
-}
-@keyframes pulseGlow {
-  0% { transform: scale(1); opacity: 0.3; }
-  100% { transform: scale(1.2); opacity: 0.1; }
-}
-
-/* ===== Ticker ===== */
-.ticker-background {
-  width: 100%;
   overflow: hidden;
-  background: linear-gradient(90deg, #10151c 60%, #22c55e22 100%);
-  border-radius: 16px;
-  padding: 8px 0;
+}
+
+.service-section-hot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(34,197,94,0.15), transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.service-section-hot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 70% 70%, rgba(248,113,113,0.15), transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* =========================================
+   Header / Titles
+========================================= */
+.service-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.flame-header {
+  text-shadow: 0 0 10px #22c55e, 0 0 20px #16a34a;
+}
+
+.service-title.flame-text {
+  font-size: 2.5rem;
+  background: linear-gradient(90deg, #22c55e, #84cc16, #facc15);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flame-flicker 2s infinite alternate;
+}
+
+/* =========================================
+   Ticker
+========================================= */
+.ticker-background {
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 2rem;
   position: relative;
-  margin-bottom: 30px;
-  border: 2px solid #22c55e99;
-  box-shadow: 0 2px 16px 0 #22c55e22;
+  height: 2rem;
+  background: linear-gradient(90deg, #111, #1a1a1a);
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(34,197,94,0.3), 0 0 20px rgba(248,113,113,0.2);
 }
 
 .ticker-marquee, .ticker-marquee2 {
   display: flex;
-  white-space: nowrap;
-  animation: marquee 15s linear infinite;
-  filter: drop-shadow(0 0 8px #22c55e88);
-}
-
-.ticker-marquee2 {
+  gap: 2rem;
   position: absolute;
-  top: 0;
-  left: 100%;
-  animation-delay: 7.5s;
+  white-space: nowrap;
+  will-change: transform;
+  animation: ticker 10s linear infinite;
 }
 
-.ticker-background span {
-  margin: 0 20px;
-  font-weight: 700;
-  text-shadow: 0 0 12px #22c55e99, 0 0 2px #fff;
-  font-size: 1.15rem;
-  letter-spacing: 0.03em;
-  transition: color 0.2s;
-}
+.ticker-marquee2 { top: 100%; }
 
-@keyframes marquee {
-  0% { transform: translateX(0); }
+@keyframes ticker {
+  0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
 }
 
-/* ===== Header ===== */
-.service-header {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 18px;
-  justify-content: center;
+.ticker-background span {
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
 }
 
-.service-title {
-  font-size: 2.3rem;
-  font-weight: 800;
-  text-shadow: 0 0 24px #22c55e99, 0 0 8px #fff;
-  letter-spacing: 0.04em;
-  background: linear-gradient(90deg,var(--primary),var(--accent),var(--primary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-fill-color: transparent;
-  animation: titleGlow 2.5s infinite alternate;
-}
-@keyframes titleGlow {
-  0% { text-shadow: 0 0 24px #22c55e99, 0 0 8px #fff; }
-  100% { text-shadow: 0 0 32px #22c55e, 0 0 12px #fff; }
-}
-
-.service-icon-green {
-  color: var(--primary);
-  filter: drop-shadow(0 0 12px var(--primary));
-}
-
-.service-icon-yellow {
-  color: var(--accent);
-  filter: drop-shadow(0 0 12px var(--accent));
-}
-
-.service-desc {
-  max-width: 600px;
-  text-align: center;
-  margin-bottom: 40px;
-  color: var(--muted);
-  font-size: 1.15rem;
-  font-weight: 500;
-  text-shadow: 0 0 8px #22c55e44;
-}
-
-/* ===== Plan Cards ===== */
+/* =========================================
+   Plan Container
+========================================= */
 .plan-container {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: 1fr;
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
-  }
-  @media (min-width: 768px) {
-    .plan-container {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-.plan-card-wrapper {
-  perspective: 1200px;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
+/* =========================================
+   Plan Card
+========================================= */
 .plan-card {
   position: relative;
-  background: var(--card-bg);
-  backdrop-filter: blur(var(--glass-blur));
+  background: rgba(20,20,20,0.7);
   border-radius: 16px;
-  padding: 24px;
-  width: 280px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-  cursor: pointer;
   overflow: hidden;
-    border-radius: 20px;
-    padding: 28px 24px 20px 24px;
-    width: 100%;
-    min-width: 260px;
-    max-width: 340px;
-    transition: transform 0.3s cubic-bezier(.4,2,.3,1), box-shadow 0.3s cubic-bezier(.4,2,.3,1);
-    box-shadow: 0 8px 40px #22c55e22, 0 0 24px #0f172a99;
-    cursor: pointer;
-    overflow: hidden;
-    border: 2px solid rgba(34,197,94,0.18);
-}
-
-.plan-card.selected {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 12px 40px rgba(34,197,94,0.5);
-    transform: translateY(-8px) scale(1.07);
-    box-shadow: 0 0 48px 0 #22c55e99, 0 0 24px 0 #0f172a;
-    border: 2.5px solid #22c55e;
+  padding: 1.5rem;
+  width: 300px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+  z-index: 1;
 }
 
 .plan-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 10px 36px rgba(34,197,94,0.35);
-    transform: translateY(-6px) scale(1.04);
-    box-shadow: 0 0 32px 0 #22c55e99, 0 0 12px 0 #0f172a;
-    filter: brightness(1.08);
+  transform: translateY(-8px);
+  box-shadow: 0 0 20px #22c55e, 0 0 40px #f87171;
 }
 
-.plan-badge {
+.plan-card:hover::before {
+  content: '';
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: var(--primary);
-  color: #000;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  box-shadow: 0 0 8px var(--primary);
-    position: absolute;
-    top: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(90deg,var(--primary),#4ade80);
-    color: #fff;
-    font-weight: 700;
-    padding: 0.3rem 1rem;
-    border-radius: 9999px;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    box-shadow: 0 0 8px #22c55e99;
-    letter-spacing: 0.04em;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #22c55e, #f87171, #fbbf24);
+  opacity: 0.25;
+  filter: blur(20px);
+  z-index: 0;
 }
 
-.ultimate-badge {
-  background: var(--accent);
-  color: #000;
-  box-shadow: 0 0 10px var(--accent);
-    background: linear-gradient(90deg,#facc15,#ef4444);
-    color: #fff;
-    box-shadow: 0 0 12px #facc15cc;
+.plan-card-bg-hot {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(34,197,94,0.2), rgba(248,113,113,0.2));
+  filter: blur(60px) saturate(200%);
+  opacity: 0.3;
+  z-index: 0;
 }
 
-.plan-description-top {
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin-bottom: 12px;
-  text-align: center;
-    font-size: 0.95rem;
-    color: #a5b4fc;
-    margin-bottom: 0.75rem;
-    font-weight: 500;
-    text-align: center;
-    text-shadow: 0 0 6px #4ade8044;
+/* =========================================
+   Plan Text & Features
+========================================= */
+.plan-name.flame-text {
+  font-size: 1.8rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #f87171, #22c55e, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(255,255,255,0.2);
+  animation: flame-flicker 1.5s infinite alternate;
 }
 
-.plan-image {
-  width: 100%;
-  border-radius: 12px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    width: 90px;
-    height: 90px;
-    margin: 0 auto 1rem;
-    border-radius: 50%;
-    box-shadow: 0 0 16px #22c55e44;
-    border: 2px solid #22c55e44;
+.plan-price.hot-price {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #f87171;
+  text-shadow: 0 0 10px rgba(255,87,87,0.5);
 }
 
-.plan-name {
-  font-size: 1.5rem;
-  text-align: center;
-  margin-bottom: 6px;
-  text-shadow: 0 0 6px var(--primary);
-    font-size: 1.6rem;
-    font-weight: 800;
-    letter-spacing: 0.03em;
-    color: #f1f5f9;
-    text-shadow: 0 0 8px #22c55e44;
-    text-align: center;
-    margin-bottom: 6px;
-}
-
-.plan-price {
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: var(--accent);
-    text-align: center;
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: #22c55e;
-    margin-bottom: 1rem;
-    text-shadow: 0 0 12px #22c55e99;
-}
-
-.plan-chart {
-  margin: 12px 0;
-  background: rgba(20,25,40,0.6);
-  padding: 12px;
-  border-radius: 12px;
-    height: 180px;
-    margin: 1rem 0;
-    background: linear-gradient(90deg,#22c55e22 0%,#10151c 100%);
-    border-radius: 1rem;
-    box-shadow: 0 0 16px #22c55e22;
-    padding: 0.5rem;
-}
-
+.plan-description,
+.plan-description-top,
 .plan-features {
-  list-style: none;
-  padding: 0;
-  margin: 12px 0;
-    margin: 1rem 0;
-    text-align: left;
-    font-size: 1rem;
-    color: #a5b4fc;
-  }
-  .plan-features li {
-    padding: 0.25rem 0;
-    transition: color 0.2s;
-    font-size: 1rem;
-    color: #a5b4fc;
+  text-align: center;
 }
 
 .plan-features li {
-  margin: 6px 0;
-  font-size: 0.9rem;
-  color: var(--text);
   display: flex;
-  align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 0.3rem;
 }
 
-.plan-description {
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin-bottom: 16px;
-  text-align: center;
-    font-size: 1rem;
-    color: #cbd5e1;
-    margin-bottom: 1rem;
-    min-height: 48px;
-    text-align: center;
-    text-shadow: 0 0 4px #22c55e22;
-}
-
-.plan-btn {
-  width: 100%;
-  padding: 10px 0;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
-  border: none;
+/* =========================================
+   Buttons
+========================================= */
+.plan-btn.btn-fire {
+  display: block;
+  margin: 1rem auto 0;
+  width: 80%;
+  font-weight: bold;
+  padding: 0.8rem 0;
   border-radius: 12px;
-  color: #000;
-  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 12px rgba(34,197,94,0.5);
-    width: 100%;
-    padding: 12px 0;
-    background: linear-gradient(90deg,#22c55e,#16a34a);
-    border: none;
-    border-radius: 0.7rem;
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.08rem;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 0 12px #22c55e44;
-  }
-  .plan-btn:hover {
-    background: linear-gradient(90deg,#facc15,#22c55e);
-    transform: scale(1.08);
-    box-shadow: 0 0 24px #22c55e99;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, #22c55e, #f87171, #fbbf24, #22c55e);
+  background-size: 400% 400%;
+  animation: holographic 5s ease infinite;
+  transition: all 0.3s;
 }
 
-.plan-btn:hover {
-  background: linear-gradient(90deg, var(--accent), var(--primary));
-  box-shadow: 0 0 20px rgba(34,197,94,0.7);
+.plan-btn.btn-fire:hover {
+  transform: scale(1.08) rotate(-1deg);
+  box-shadow: 0 0 25px #22c55e, 0 0 35px #f87171, 0 0 50px #fbbf24;
 }
 
-/* ===== Ripple Effect ===== */
-.ripple {
+@keyframes holographic {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* =========================================
+   Badge
+========================================= */
+.plan-badge {
   position: absolute;
-  border-radius: 50%;
-  transform: scale(0);
-  animation: ripple 0.6s linear;
-  background-color: rgba(255,255,255,0.3);
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  z-index: 10;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(255,255,255,0.4), 0 0 20px rgba(255,255,255,0.2);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(30,30,30,0.6);
 }
 
-.ripple.show {
-  transform: scale(4);
-  opacity: 0;
+.pulse-green {
+  background: linear-gradient(135deg, #22c55e, #84cc16);
+  animation: pulse 1.5s infinite alternate;
+  border: 1px solid #22c55e;
 }
 
-@keyframes ripple {
-  to { transform: scale(4); opacity: 0; }
+.pulse-gold {
+  background: linear-gradient(135deg, #facc15, #fbbf24);
+  animation: pulse 1.5s infinite alternate;
+  border: 1px solid #fbbf24;
 }
 
-/* ===== Comparison Table ===== */
-.comparison-table-wrapper {
-  margin-top: 50px;
+@keyframes pulse {
+  0% { transform: translateX(-50%) scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+  50% { transform: translateX(-50%) scale(1.1); box-shadow: 0 0 15px rgba(255,255,255,0.4); }
+  100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+}
+
+/* =========================================
+   Plan Chart
+========================================= */
+.plan-chart {
+  margin: 1rem auto;
+  height: 220px;
   width: 90%;
-  max-width: 900px;
-  overflow-x: auto;
-  background: linear-gradient(90deg,#10151c 60%,#22c55e22 100%);
-  border-radius: 1.2rem;
-  box-shadow: 0 0 32px #22c55e22;
-  padding: 1.2rem 0.5rem;
+  box-shadow: 0 0 15px #22c55e inset, 0 0 20px #f87171 inset;
+  border-radius: 12px;
 }
 
-.comparison-table table {
+/* =========================================
+   Comparison Table
+========================================= */
+.comparison-table-wrapper {
+  margin-top: 3rem;
+  overflow-x: auto;
+}
+
+.comparison-table {
   width: 100%;
   border-collapse: collapse;
-  background: var(--panel);
-  transition: background 0.2s;
-}
-.comparison-table td:first-child {
-  text-align: left;
-  font-weight: 700;
-  color: #22c55e;
-}
-.comparison-table td:nth-child(2) { background: rgba(255,255,255,0.03); }
-.comparison-table td:nth-child(3) { background: linear-gradient(90deg,#22c55e33 0%,#4ade8022 100%); font-weight: 700; color: #22c55e; }
-.comparison-table td:nth-child(4) { background: linear-gradient(90deg, rgba(245,158,11,0.22), rgba(239,68,68,0.22)); font-weight: 800; color: #facc15; text-shadow: 0 0 8px #facc1544; }
-.comparison-table tbody tr:hover { background: rgba(34,197,94,0.13); transition: background 0.3s ease; box-shadow: 0 0 12px #22c55e44; }
-
-.comparison-table th {
-  background: rgba(34,197,94,0.2);
-  text-transform: uppercase;
-  font-weight: 600;
 }
 
-.comparison-table tr:nth-child(even) {
-  background: rgba(34,197,94,0.05);
-}
+.comparison-table th,
 .comparison-table td {
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.8rem;
+  text-align: center;
+  background: rgba(20,20,20,0.4);
+  backdrop-filter: blur(8px);
+}
+
+/* =========================================
+   Misc Effects
+========================================= */
+.ripple {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  transform: scale(0);
+  animation: rippleEffect 0.6s forwards;
+  pointer-events: none;
+}
+
+@keyframes rippleEffect { to { transform: scale(4); opacity: 0; } }
+
+/* =========================================
+   Keyframes Flame Flicker
+========================================= */
+@keyframes flame-flicker {
+  0% { text-shadow: 0 0 5px #22c55e; }
+  25% { text-shadow: 0 0 10px #f87171, 0 0 5px #22c55e; }
+  50% { text-shadow: 0 0 15px #fbbf24, 0 0 10px #22c55e; }
+  75% { text-shadow: 0 0 12px #f87171, 0 0 8px #22c55e; }
+  100% { text-shadow: 0 0 8px #fbbf24, 0 0 5px #22c55e; }
+}
+/* =========================================
+   General Section - Futuristic Glow
+========================================= */
+.service-section-hot {
+  background: radial-gradient(circle at top, #0a0a0a 0%, #111 100%);
+  color: #e5e5e5;
+  padding: 3rem 1rem;
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-section-hot::before,
+.service-section-hot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.service-section-hot::before {
+  background: radial-gradient(circle at 30% 30%, rgba(34,197,94,0.2), transparent 70%);
+  animation: glowMove1 8s linear infinite;
+}
+
+.service-section-hot::after {
+  background: radial-gradient(circle at 70% 70%, rgba(248,113,113,0.2), transparent 70%);
+  animation: glowMove2 10s linear infinite;
+}
+
+@keyframes glowMove1 { 0%,100% {transform: translate(0,0);} 50% {transform: translate(20px, -20px);} }
+@keyframes glowMove2 { 0%,100% {transform: translate(0,0);} 50% {transform: translate(-25px, 25px);} }
+
+/* =========================================
+   Header - Neon Flame Text
+========================================= */
+.service-title.flame-text {
+  font-size: 3rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #22c55e, #84cc16, #facc15, #f87171);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flameGradient 5s ease infinite, flame-flicker 1.5s infinite alternate;
+  text-align: center;
+}
+
+@keyframes flameGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* =========================================
+   Plan Card - Glass + Neon + Hover Effects
+========================================= */
+.plan-card {
+  position: relative;
+  background: rgba(20,20,20,0.6);
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 1.5rem;
+  width: 320px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  backdrop-filter: blur(12px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 20px rgba(34,197,94,0.3), 0 0 30px rgba(248,113,113,0.2);
+  z-index: 1;
+}
+
+.plan-card:hover {
+  transform: translateY(-10px) rotate(-1deg);
+  box-shadow: 0 0 25px #22c55e, 0 0 40px #f87171, 0 0 60px #facc15;
+}
+
+.plan-card-bg-hot {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(34,197,94,0.3), rgba(248,113,113,0.3));
+  filter: blur(60px) saturate(250%);
+  opacity: 0.3;
+  z-index: 0;
+  animation: pulseGlow 6s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% {opacity:0.3; transform: scale(1);}
+  50% {opacity:0.5; transform: scale(1.05);}
+  100% {opacity:0.3; transform: scale(1);}
+}
+
+/* =========================================
+   Plan Name & Price - Flicker & Neon
+========================================= */
+.plan-name.flame-text {
+  font-size: 2rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #f87171, #22c55e, #fbbf24, #84cc16);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flameGradient 6s ease infinite, flame-flicker 1.5s infinite alternate;
+  text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+.plan-price.hot-price {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #f87171;
+  text-shadow: 0 0 15px #f87171, 0 0 25px #fbbf24;
+}
+
+/* =========================================
+   Plan Button - Holographic Neon
+========================================= */
+.plan-btn.btn-fire {
+  display: block;
+  margin: 1rem auto 0;
+  width: 85%;
+  font-weight: bold;
+  padding: 0.9rem 0;
+  border-radius: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #22c55e, #f87171, #fbbf24, #22c55e);
+  background-size: 400% 400%;
+  animation: holographic 5s ease infinite;
+  transition: all 0.3s;
+  box-shadow: 0 0 15px #22c55e, 0 0 25px #f87171;
+  color: #111;
+}
+
+.plan-btn.btn-fire:hover {
+  transform: scale(1.1) rotate(-1deg);
+  box-shadow: 0 0 25px #22c55e, 0 0 40px #f87171, 0 0 60px #fbbf24;
+}
+
+@keyframes holographic {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* =========================================
+   Badge - Neon Pulse
+========================================= */
+.plan-badge {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1.2rem;
+  border-radius: 24px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  z-index: 10;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(30,30,30,0.7);
+  box-shadow: 0 0 15px #22c55e, 0 0 25px #f87171;
+  animation: pulseBadge 1.5s infinite alternate;
+}
+
+@keyframes pulseBadge {
+  0% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.1); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+
+/* =========================================
+   Misc - Ripple & Chart Neon
+========================================= */
+.ripple {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  transform: scale(0);
+  animation: rippleEffect 0.6s forwards;
+  pointer-events: none;
+}
+
+@keyframes rippleEffect { to { transform: scale(4); opacity: 0; } }
+
+.plan-chart {
+  margin: 1rem auto;
+  height: 220px;
+  width: 90%;
+  box-shadow: 0 0 20px #22c55e inset, 0 0 25px #f87171 inset, 0 0 35px #fbbf24 inset;
+  border-radius: 14px;
+}
+
+/* =========================================
+   Keyframes Flame Flicker
+========================================= */
+@keyframes flame-flicker {
+  0% { text-shadow: 0 0 5px #22c55e; }
+  25% { text-shadow: 0 0 10px #f87171, 0 0 5px #22c55e; }
+  50% { text-shadow: 0 0 15px #fbbf24, 0 0 10px #22c55e; }
+  75% { text-shadow: 0 0 12px #f87171, 0 0 8px #22c55e; }
+  100% { text-shadow: 0 0 8px #fbbf24, 0 0 5px #22c55e; }
+}
+/* =========================================
+   General Section - Cyberpunk Animated
+========================================= */
+.service-section-hot {
+  background: radial-gradient(circle at top, #0a0a0a 0%, #111 100%);
+  color: #e5e5e5;
+  padding: 3rem 1rem;
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Particle Layer */
+.service-section-hot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+  background-size: 5px 5px;
+  z-index: 0;
+  animation: moveParticles 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes moveParticles {
+  0% { background-position: 0 0; }
+  100% { background-position: 1000px 1000px; }
+}
+
+/* Neon Line Layer */
+.service-section-hot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(34,197,94,0.05),
+    rgba(34,197,94,0.05) 2px,
+    transparent 2px,
+    transparent 8px
+  );
+  z-index: 0;
+  animation: slideLines 15s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes slideLines {
+  0% { background-position: 0 0; }
+  100% { background-position: 100% 100%; }
+}
+
+/* =========================================
+   Header / Titles - Neon Flame Gradient + Flicker
+========================================= */
+.service-title.flame-text {
+  font-size: 3rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #22c55e, #84cc16, #facc15, #f87171, #fbbf24);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flameGradient 6s ease infinite, flame-flicker 1.5s infinite alternate;
+  text-align: center;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px #fff, 0 0 20px #f87171, 0 0 30px #fbbf24;
+}
+
+/* =========================================
+   Plan Container - Center + Gap
+========================================= */
+.plan-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* =========================================
+   Plan Card - Floating + Multi-layer Neon + Cyberpunk Glow
+========================================= */
+.plan-card {
+  position: relative;
+  background: rgba(10,10,10,0.6);
+  border-radius: 22px;
+  overflow: hidden;
+  padding: 2rem 1.5rem;
+  width: 340px;
+  text-align: center;
+  transition: transform 0.4s, box-shadow 0.4s;
+  backdrop-filter: blur(15px) saturate(220%);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 15px #22c55e, 0 0 25px #f87171, 0 0 35px #fbbf24;
+  z-index: 1;
+  animation: floatCard 6s ease-in-out infinite;
+}
+
+.plan-card:hover {
+  transform: translateY(-14px) rotate(-2deg);
+  box-shadow: 0 0 30px #22c55e, 0 0 50px #f87171, 0 0 70px #fbbf24, 0 0 80px #84cc16;
+}
+
+@keyframes floatCard {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Card Background Glow */
+.plan-card-bg-hot {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(34,197,94,0.3), rgba(248,113,113,0.3), rgba(251,191,36,0.3));
+  filter: blur(80px) saturate(250%);
+  opacity: 0.3;
+  z-index: 0;
+  animation: pulseGlow 6s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% {opacity:0.3; transform: scale(1);}
+  50% {opacity:0.5; transform: scale(1.08);}
+  100% {opacity:0.3; transform: scale(1);}
+}
+
+/* =========================================
+   Plan Name & Price - Flicker + Neon Glow
+========================================= */
+.plan-name.flame-text {
+  font-size: 2rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #f87171, #22c55e, #fbbf24, #84cc16, #facc15);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flameGradient 6s ease infinite, flame-flicker 1.5s infinite alternate;
+  text-shadow: 0 0 12px #fff, 0 0 20px #f87171, 0 0 30px #fbbf24;
+}
+
+.plan-price.hot-price {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #f87171;
+  text-shadow: 0 0 15px #f87171, 0 0 25px #fbbf24, 0 0 35px #22c55e;
+}
+
+/* =========================================
+   Button - Holographic Gradient + Neon Pulse
+========================================= */
+.plan-btn.btn-fire {
+  display: block;
+  margin: 1.2rem auto 0;
+  width: 85%;
+  font-weight: bold;
+  padding: 0.9rem 0;
+  border-radius: 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #22c55e, #f87171, #fbbf24, #22c55e);
+  background-size: 400% 400%;
+  animation: holographic 5s ease infinite, btnGlow 3s ease-in-out infinite alternate;
+  transition: all 0.3s;
+  color: #111;
+  box-shadow: 0 0 20px #22c55e, 0 0 35px #f87171, 0 0 50px #fbbf24;
+}
+
+.plan-btn.btn-fire:hover {
+  transform: scale(1.18) rotate(-2deg);
+  box-shadow: 0 0 35px #22c55e, 0 0 50px #f87171, 0 0 70px #fbbf24;
+}
+
+@keyframes holographic {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes btnGlow {
+  0%,100% { box-shadow: 0 0 20px #22c55e, 0 0 35px #f87171, 0 0 50px #fbbf24; }
+  50% { box-shadow: 0 0 35px #22c55e, 0 0 50px #f87171, 0 0 70px #fbbf24; }
+}
+
+/* =========================================
+   Badge - Neon Pulse + Glow
+========================================= */
+.plan-badge {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1.2rem;
+  border-radius: 28px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  z-index: 10;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(30,30,30,0.75);
+  box-shadow: 0 0 18px #22c55e, 0 0 30px #f87171, 0 0 40px #fbbf24;
+  animation: pulseBadge 1.5s infinite alternate;
+}
+
+@keyframes pulseBadge {
+  0% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.18); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+
+/* =========================================
+   Chart Neon Shadow
+========================================= */
+.plan-chart {
+  margin: 1rem auto;
+  height: 220px;
+  width: 90%;
+  box-shadow: 0 0 25px #22c55e inset, 0 0 35px #f87171 inset, 0 0 45px #fbbf24 inset;
+  border-radius: 16px;
+}
+
+/* =========================================
+   Misc Ripple Effect
+========================================= */
+.ripple {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  transform: scale(0);
+  animation: rippleEffect 0.6s forwards;
+  pointer-events: none;
+}
+
+@keyframes rippleEffect { to { transform: scale(4); opacity: 0; } }
+
+/* =========================================
+   Flame Flicker Keyframes
+========================================= */
+@keyframes flame-flicker {
+  0% { text-shadow: 0 0 5px #22c55e; }
+  25% { text-shadow: 0 0 10px #f87171, 0 0 5px #22c55e; }
+  50% { text-shadow: 0 0 15px #fbbf24, 0 0 10px #22c55e; }
+  75% { text-shadow: 0 0 12px #f87171, 0 0 8px #22c55e; }
+  100% { text-shadow: 0 0 8px #fbbf24, 0 0 5px #22c55e; }
+}
+/* ===== Description Hot ===== */
+.service-desc.hot-desc {
+  font-size: 1.15rem;
+  font-weight: 500;
+  text-align: center;
+  color: #e5e5e5;
+  text-shadow:
+    0 0 5px #22c55e,
+    0 0 10px #f87171,
+    0 0 15px #fbbf24,
+    0 0 20px #84cc16;
+  background: linear-gradient(90deg, #22c55e, #f87171, #fbbf24, #84cc16);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGlow 3s ease-in-out infinite alternate;
+  margin: 1rem 0 2rem;
+}
+
+/* Keyframe for glowing text */
+@keyframes textGlow {
+  0% {
+    text-shadow: 0 0 5px #22c55e, 0 0 10px #f87171, 0 0 15px #fbbf24, 0 0 20px #84cc16;
+  }
+  50% {
+    text-shadow: 0 0 10px #22c55e, 0 0 15px #f87171, 0 0 25px #fbbf24, 0 0 30px #84cc16;
+  }
+  100% {
+    text-shadow: 0 0 5px #22c55e, 0 0 10px #f87171, 0 0 15px #fbbf24, 0 0 20px #84cc16;
+  }
 }
